@@ -16,6 +16,8 @@ public class MainGame extends JPanel implements KeyListener {
 	public static int canvas_width = 1280;
 	public static int canvas_height = 640;
 
+	private Player player1;
+
 	
 	public static int getCanvasWidth()
 	{
@@ -26,19 +28,16 @@ public class MainGame extends JPanel implements KeyListener {
 	{
 		return canvas_height;
 	}
-	
-
-	Player player;
-	
+		
 	public void init()
 	{
-		player = new Player();
-		addKeyListener(this);
+		player1 = new Player("x", MainGame.getCanvasWidth()/2, MainGame.getCanvasHeight()/2);
 	}
 
 	public MainGame()
 	{
 	}
+	
 	
 	// method to make dividers
 	
@@ -155,12 +154,12 @@ public class MainGame extends JPanel implements KeyListener {
 	
 		// player box
 		g.setColor(new Color(0,0,255));
-		g.fillRect(player.getX()-32, player.getY()-32, 64, 64);
+		g.fillRect(player1.getX()-32, player1.getY()-32, 64, 64);
 	
 		//player symbol
 		g.setColor(white);
 		g.setFont(playerFont);
-		g.drawString("x",player.getX()-10,player.getY()+10);
+		g.drawString("x",player1.getX()-10,player1.getY()+10);
 		
 		int[] colorValues =  {32, 64, 96, 192, 224, 256};
 
@@ -173,7 +172,7 @@ public class MainGame extends JPanel implements KeyListener {
 		//score display
 		g.setColor(new Color(0,0,0));
 		g.setFont(statsFont);
-		g.drawString("x="+player.getScore(),canvas_width/2, canvas_height+64);
+		g.drawString("x="+player1.getScore(),canvas_width/2, canvas_height+64);
 	
 	}
 	
@@ -208,6 +207,19 @@ public class MainGame extends JPanel implements KeyListener {
 		if (e.getKeyCode()==KeyEvent.VK_W)
 		{
 			System.out.println("W has been pressed");
+			player1.raisePlayerY(-15);
+		}
+		if (e.getKeyCode()==KeyEvent.VK_A)
+		{
+			System.out.println("A has been pressed");
+		}
+		if (e.getKeyCode()==KeyEvent.VK_S)
+		{
+			System.out.println("S has been pressed");
+		}
+		if (e.getKeyCode()==KeyEvent.VK_D)
+		{
+			System.out.println("D has been pressed");
 		}
 	}
 	public void keyReleased(KeyEvent e) {}
