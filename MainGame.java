@@ -6,7 +6,7 @@ import java.util.Random;
 /**
  * 
  * @author Yunus Ishs
- *
+ * 
  */
 
 public class MainGame extends JPanel implements KeyListener {
@@ -15,6 +15,13 @@ public class MainGame extends JPanel implements KeyListener {
 	//canvas configurations
 	public static int canvas_width = 1280;
 	public static int canvas_height = 640;
+	
+	// fonts and colors
+	Color black = new Color(0,0,0);
+	Color white = new Color(255,255,255);
+	Font opFont = new Font("Cambria Math", Font.ITALIC, 40);
+	Font playerFont = new Font("Cambria Math", Font.ITALIC, 40);
+	Font statsFont = new Font("Cambria Math", Font.ITALIC, 32);
 
 	private Player player1;
 
@@ -48,18 +55,16 @@ public class MainGame extends JPanel implements KeyListener {
 		g.fillRect(player1.getX()-32, player1.getY()-32, 64, 64);
 
 		//player symbol
-		g.setColor(new Color(255, 255, 255));
-		g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
+		g.setColor(white);
+		g.setFont(playerFont);
 		g.drawString("x",player1.getX()-10,player1.getY()+10);
 	}
 	// method to make dividers
 	
 	public void makeDivider(Graphics g, int xCoord, int yCoord, 
-			int red, int green, int blue, Font font)
+			int red, int green, int blue)
 	{
 		//division box
-		Operators.setCoords(xCoord, yCoord);
-		Operators.setColor(63, 63, 63);
 		g.setColor(new Color(Operators.getRed(), Operators.getGreen(), Operators.getBlue()));
 		g.fillRect(Operators.getX()-32, Operators.getY()-32, 64, 64);
 		
@@ -67,14 +72,14 @@ public class MainGame extends JPanel implements KeyListener {
 		char divisionChar = (char) 247;
 		String divisionString = String.valueOf(divisionChar);
 		g.setColor(new Color(255-Operators.getRed(), 255-Operators.getGreen(), 255-Operators.getBlue()));
-		g.setFont(font);
+		g.setFont(opFont);
 		g.drawString(divisionString+"0",Operators.getX()-24, Operators.getY()+12);
 	}
 	
 	// method to make adders
 	
 	public void makeAdder(Graphics g, int addValue, int xCoord, int yCoord, 
-			int red, int green, int blue, Font font)
+			int red, int green, int blue)
 	{
 		//adder box
 		Operators.setCoords(xCoord, yCoord);
@@ -92,7 +97,7 @@ public class MainGame extends JPanel implements KeyListener {
 	// method to make multipliers
 	
 	public void makeMultiplier(Graphics g, int timesValue, int xCoord, int yCoord,
-			int red, int green, int blue, Font font)
+			int red, int green, int blue)
 	{
 		//multiplier box
 		Operators.setCoords(xCoord, yCoord);
@@ -112,7 +117,7 @@ public class MainGame extends JPanel implements KeyListener {
 	//method to make squares
 	
 	public void makeSquare(Graphics g, int xCoord, int yCoord, 
-			int red, int green, int blue, Font font)
+			int red, int green, int blue)
 	{		
 		//square box
 		Operators.setCoords(xCoord, yCoord);
@@ -131,7 +136,7 @@ public class MainGame extends JPanel implements KeyListener {
 	//method to make cubes
 	
 	public void makeCube(Graphics g, int xCoord, int yCoord, 
-			int red, int green, int blue, Font font)
+			int red, int green, int blue)
 	{	//cube box
 		Operators.setCoords(xCoord, yCoord);
 		Operators.setColor(red, green, blue);
@@ -158,19 +163,25 @@ public class MainGame extends JPanel implements KeyListener {
 	for (int i=64; i<canvas_width; i+=64)
 		g.drawLine(i, 0, i, canvas_height);
 	}
-
+	
+	public void makeOperators(Graphics g)
+	{
+		Operators.operatorConfigs();
+		makeDivider(g, Operators.getX(), Operators.getY(), 
+				Operators.getRed(),Operators.getGreen(), Operators.getBlue());
+		
+		
+	}
+	
 	public void moveOperators(Graphics g)
 	{
 		
 	}
+	
 	public void paintComponent(Graphics g)
 	{
 		//set colors
-		Color black = new Color(0,0,0);
-		Color white = new Color(255,255,255);
-		Font playerFont = new Font("Cambria Math", Font.ITALIC, 40);
-		Font opFont = new Font("Cambria Math", Font.ITALIC, 40);
-		Font statsFont = new Font("Cambria Math", Font.ITALIC, 32);
+
 		
 	
 		// background
@@ -181,22 +192,21 @@ public class MainGame extends JPanel implements KeyListener {
 		
 		drawBgLines(g);
 		
-		int[] colorValues =  {32, 64, 96, 192, 224, 256};
 		
 		makePlayer(g, player1.getX(), getY());
 		
 		Random rand = new Random();
 		
 		int xPosition = rand.nextInt(20);
-		makeAdder(g, 0, 64*xPosition-32, 128, 31,31, 31, opFont);
+		makeAdder(g, 0, 64*xPosition-32, 128, 31,31, 31);
 		xPosition = rand.nextInt(20);
-		makeMultiplier(g, 0, 64*xPosition-32, 128, 63,63, 63, opFont);
+		makeMultiplier(g, 0, 64*xPosition-32, 128, 63,63, 63);
 		xPosition = rand.nextInt(20);
-		makeDivider(g, 64*xPosition-32, 128, 95,95, 95, opFont);
+		makeDivider(g, 64*xPosition-32, 128, 95,95, 95);
 		xPosition = rand.nextInt(20);
-		makeSquare(g, 64*xPosition-32, 128, 223,223, 223, opFont);
+		makeSquare(g, 64*xPosition-32, 128, 223,223, 223);
 		xPosition = rand.nextInt(20);
-		makeCube(g, 64*xPosition-32, 128, 255,255, 255, opFont);
+		makeCube(g, 64*xPosition-32, 128, 255,255, 255);
 		
 		//score display
 		g.setColor(new Color(0,0,0));
@@ -235,22 +245,23 @@ public class MainGame extends JPanel implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode()==KeyEvent.VK_W)
 		{
-			//player1.raisePlayerY(-15);
-			System.out.println("W has been pressed");
-			System.out.println(player1.getX()+", "+player1.getY());
-			
+			player1.raisePlayerY(-8);
+			repaint();			
 		}
 		if (e.getKeyCode()==KeyEvent.VK_A)
 		{
-			System.out.println("A has been pressed");
-		}
+			player1.raisePlayerX(-8);
+			repaint();			}
 		if (e.getKeyCode()==KeyEvent.VK_S)
 		{
-			System.out.println("S has been pressed");
+			player1.raisePlayerY(8);
+			repaint();	
+
 		}
 		if (e.getKeyCode()==KeyEvent.VK_D)
 		{
-			System.out.println("D has been pressed");
+			player1.raisePlayerX(8);
+			repaint();	
 		}
 	}
 	

@@ -1,3 +1,4 @@
+import java.util.Random;
 
 public class Operators {
 
@@ -104,4 +105,22 @@ public class Operators {
 		timesBy = timesValue;
 	}
 	
+	public static void operatorConfigs()
+	{
+		Random rand = new Random();
+		
+		// set position
+		int xPosition = rand.nextInt(20);
+		setCoords(64*xPosition-32, 128);
+	
+		// set color
+		int[] colorValues =  {32, 64, 96, 192, 224, 256};
+		int randomRedIndex = rand.nextInt(6);
+		int randomGreenIndex = rand.nextInt(6);
+		int randomBlueIndex = rand.nextInt(6);
+		setColor(colorValues[randomRedIndex], colorValues[randomGreenIndex],
+				colorValues[randomBlueIndex]);
+		
+	}
+
 }
