@@ -9,6 +9,7 @@ public class Operators {
 	public static int green = 0;
 	public static int blue = 0;
 	
+	
 	public void createAdder(int xCoord, int yCoord, int addValue, int r, int g, int b)
 	{
 		opX = xCoord;

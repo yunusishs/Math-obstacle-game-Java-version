@@ -31,14 +31,27 @@ public class MainGame extends JPanel implements KeyListener {
 		
 	public void init()
 	{
-		player1 = new Player("x", MainGame.getCanvasWidth()/2, MainGame.getCanvasHeight()/2);
+		player1 = new Player(MainGame.getCanvasWidth()/2, MainGame.getCanvasHeight()/2);
 	}
 
 	public MainGame()
 	{
+		addKeyListener(this);
 	}
+	// method to make the player
 	
 	
+	public void makePlayer(Graphics g, int xCoord, int yCoord)
+	{
+		// player box
+		g.setColor(new Color(0,0,255));
+		g.fillRect(player1.getX()-32, player1.getY()-32, 64, 64);
+
+		//player symbol
+		g.setColor(new Color(255, 255, 255));
+		g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
+		g.drawString("x",player1.getX()-10,player1.getY()+10);
+	}
 	// method to make dividers
 	
 	public void makeDivider(Graphics g, int xCoord, int yCoord, 
@@ -96,6 +109,8 @@ public class MainGame extends JPanel implements KeyListener {
 		g.drawString(timesString+Operators.getTimesValue(),Operators.getX()-32, Operators.getY()+12);
 	}
 	
+	//method to make squares
+	
 	public void makeSquare(Graphics g, int xCoord, int yCoord, 
 			int red, int green, int blue, Font font)
 	{		
@@ -112,7 +127,9 @@ public class MainGame extends JPanel implements KeyListener {
 		g.setFont(font);
 		g.drawString("x"+squareString,Operators.getX()-16, Operators.getY()+12);
 	}
-
+	
+	//method to make cubes
+	
 	public void makeCube(Graphics g, int xCoord, int yCoord, 
 			int red, int green, int blue, Font font)
 	{	//cube box
@@ -129,6 +146,23 @@ public class MainGame extends JPanel implements KeyListener {
 		g.drawString("x"+cubeString,Operators.getX()-16, Operators.getY()+12);
 	}
 	
+	// these lines are not necessary
+
+	public void drawBgLines(Graphics g) {
+	//horizontal lines
+	for (int i=64; i<canvas_height; i+=64)
+		g.drawLine(0, i, canvas_width, i);
+	g.drawLine(0, canvas_height/2, canvas_width, canvas_height/2);
+	
+	//vertical lines
+	for (int i=64; i<canvas_width; i+=64)
+		g.drawLine(i, 0, i, canvas_height);
+	}
+
+	public void moveOperators(Graphics g)
+	{
+		
+	}
 	public void paintComponent(Graphics g)
 	{
 		//set colors
@@ -144,30 +178,25 @@ public class MainGame extends JPanel implements KeyListener {
 		g.fillRect(0, 0, canvas_width, canvas_height);
 		
 		g.setColor(white);
-		//horizontal line
-		for (int i=64; i<canvas_height; i+=64)
-			g.drawLine(0, i, canvas_width, i);
-		g.drawLine(0, canvas_height/2, canvas_width, canvas_height/2);
-			//vertical lines
-		for (int i=64; i<canvas_width; i+=64)
-			g.drawLine(i, 0, i, canvas_height);
-	
-		// player box
-		g.setColor(new Color(0,0,255));
-		g.fillRect(player1.getX()-32, player1.getY()-32, 64, 64);
-	
-		//player symbol
-		g.setColor(white);
-		g.setFont(playerFont);
-		g.drawString("x",player1.getX()-10,player1.getY()+10);
+		
+		drawBgLines(g);
 		
 		int[] colorValues =  {32, 64, 96, 192, 224, 256};
-
-		makeAdder(g, 0, 64*6, 128, 31,31, 31, opFont);
-		makeMultiplier(g, 0, 64*8, 128, 63,63, 63, opFont);
-		makeDivider(g, 64*10, 128, 95,95, 95, opFont);
-		makeSquare(g, 64*12, 128, 223,223, 223, opFont);
-		makeCube(g, 64*14, 128, 255,255, 255, opFont);
+		
+		makePlayer(g, player1.getX(), getY());
+		
+		Random rand = new Random();
+		
+		int xPosition = rand.nextInt(20);
+		makeAdder(g, 0, 64*xPosition-32, 128, 31,31, 31, opFont);
+		xPosition = rand.nextInt(20);
+		makeMultiplier(g, 0, 64*xPosition-32, 128, 63,63, 63, opFont);
+		xPosition = rand.nextInt(20);
+		makeDivider(g, 64*xPosition-32, 128, 95,95, 95, opFont);
+		xPosition = rand.nextInt(20);
+		makeSquare(g, 64*xPosition-32, 128, 223,223, 223, opFont);
+		xPosition = rand.nextInt(20);
+		makeCube(g, 64*xPosition-32, 128, 255,255, 255, opFont);
 		
 		//score display
 		g.setColor(new Color(0,0,0));
@@ -206,8 +235,10 @@ public class MainGame extends JPanel implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode()==KeyEvent.VK_W)
 		{
+			//player1.raisePlayerY(-15);
 			System.out.println("W has been pressed");
-			player1.raisePlayerY(-15);
+			System.out.println(player1.getX()+", "+player1.getY());
+			
 		}
 		if (e.getKeyCode()==KeyEvent.VK_A)
 		{
@@ -222,8 +253,11 @@ public class MainGame extends JPanel implements KeyListener {
 			System.out.println("D has been pressed");
 		}
 	}
+	
 	public void keyReleased(KeyEvent e) {}
 	public void keyTyped(KeyEvent e) {}
+
+	
 	
 
 }
