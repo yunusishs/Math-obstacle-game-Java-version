@@ -90,7 +90,7 @@ public class MainGame extends JPanel implements KeyListener {
 		//adder text
 		Operators.setAddValue(addValue);
 		g.setColor(new Color(255-Operators.getRed(), 255-Operators.getGreen(), 255-Operators.getBlue()));
-		g.setFont(font);
+		g.setFont(opFont);
 		g.drawString("+"+Operators.getAddValue(),Operators.getX()-32, Operators.getY()+12);
 	}
 	
@@ -110,7 +110,7 @@ public class MainGame extends JPanel implements KeyListener {
 		char timesChar = (char) 215;
 		String timesString = String.valueOf(timesChar);
 		g.setColor(new Color(255-Operators.getRed(), 255-Operators.getGreen(), 255-Operators.getBlue()));
-		g.setFont(font);
+		g.setFont(opFont);
 		g.drawString(timesString+Operators.getTimesValue(),Operators.getX()-32, Operators.getY()+12);
 	}
 	
@@ -129,7 +129,7 @@ public class MainGame extends JPanel implements KeyListener {
 		char squareChar = (char) 178;
 		String squareString = String.valueOf(squareChar);
 		g.setColor(new Color(255-Operators.getRed(), 255-Operators.getGreen(), 255-Operators.getBlue()));
-		g.setFont(font);
+		g.setFont(opFont);
 		g.drawString("x"+squareString,Operators.getX()-16, Operators.getY()+12);
 	}
 	
@@ -147,7 +147,7 @@ public class MainGame extends JPanel implements KeyListener {
 		char cubeChar = (char) 179;
 		String cubeString = String.valueOf(cubeChar);
 		g.setColor(new Color(255-Operators.getRed(), 255-Operators.getGreen(), 255-Operators.getBlue()));
-		g.setFont(font);
+		g.setFont(opFont);
 		g.drawString("x"+cubeString,Operators.getX()-16, Operators.getY()+12);
 	}
 	
@@ -166,15 +166,35 @@ public class MainGame extends JPanel implements KeyListener {
 	
 	public void makeOperators(Graphics g)
 	{
-		Operators.operatorConfigs();
-		makeDivider(g, Operators.getX(), Operators.getY(), 
-				Operators.getRed(),Operators.getGreen(), Operators.getBlue());
+		Random rand = new Random();
+		int[] colorValues =  {32, 64, 96, 192, 224, 256};
+		
+		//for (int i=0; i<4; i+=1)
+			
+		Operators.operatorConfigs(); // make random configurations
+		int xPosition = rand.nextInt(20); // random x coordinate
+		makeDivider(g, 64*xPosition-32, 0, 95,95, 95); // spawn it
+		
+		//Operators.operatorConfigs();
+		//xPosition = rand.nextInt(20);
+		//makeAdder(g, 0, 64*xPosition-32, 128, 31,31, 31);
+		
+		//xPosition = rand.nextInt(20);
+		//makeMultiplier(g, 0, 64*xPosition-32, 128, 63,63, 63);
+		//xPosition = rand.nextInt(20);
+		//makeDivider(g, 64*xPosition-32, 128, 95,95, 95);
+		//xPosition = rand.nextInt(20);
+		//makeSquare(g, 64*xPosition-32, 128, 223,223, 223);
+		//xPosition = rand.nextInt(20);
+		//makeCube(g, 64*xPosition-32, 128, 255,255, 255);
 		
 		
 	}
 	
 	public void moveOperators(Graphics g)
 	{
+		//Random rand = new Random();
+		
 		
 	}
 	
@@ -190,23 +210,11 @@ public class MainGame extends JPanel implements KeyListener {
 		
 		g.setColor(white);
 		
-		drawBgLines(g);
+		//drawBgLines(g);
 		
 		
 		makePlayer(g, player1.getX(), getY());
 		
-		Random rand = new Random();
-		
-		int xPosition = rand.nextInt(20);
-		makeAdder(g, 0, 64*xPosition-32, 128, 31,31, 31);
-		xPosition = rand.nextInt(20);
-		makeMultiplier(g, 0, 64*xPosition-32, 128, 63,63, 63);
-		xPosition = rand.nextInt(20);
-		makeDivider(g, 64*xPosition-32, 128, 95,95, 95);
-		xPosition = rand.nextInt(20);
-		makeSquare(g, 64*xPosition-32, 128, 223,223, 223);
-		xPosition = rand.nextInt(20);
-		makeCube(g, 64*xPosition-32, 128, 255,255, 255);
 		
 		//score display
 		g.setColor(new Color(0,0,0));
@@ -245,21 +253,26 @@ public class MainGame extends JPanel implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode()==KeyEvent.VK_W)
 		{
+			System.out.print("Jordan, ");
 			player1.raisePlayerY(-8);
 			repaint();			
 		}
 		if (e.getKeyCode()==KeyEvent.VK_A)
 		{
+			System.out.print("that ");
 			player1.raisePlayerX(-8);
 			repaint();			}
 		if (e.getKeyCode()==KeyEvent.VK_S)
 		{
+			System.out.print("is ");
+
 			player1.raisePlayerY(8);
 			repaint();	
 
 		}
 		if (e.getKeyCode()==KeyEvent.VK_D)
 		{
+			System.out.print("enough!");
 			player1.raisePlayerX(8);
 			repaint();	
 		}

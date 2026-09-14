@@ -10,6 +10,17 @@ public class Operators {
 	public static int green = 0;
 	public static int blue = 0;
 	
+	public static int[][] dividersList = {
+			//{x, y}
+			{0, 0},
+			{0, 0},
+			{0, 0},
+			{0, 0},
+	};
+	
+
+	
+
 	
 	public void createAdder(int xCoord, int yCoord, int addValue, int r, int g, int b)
 	{
@@ -105,6 +116,15 @@ public class Operators {
 		timesBy = timesValue;
 	}
 	
+	public static void editOperatorList(int[] listName) 
+	{
+		for (int i=0; i<4; i+=1)
+		{
+			//listName[operatorIndex] = {}
+		}
+	}
+	
+			
 	public static void operatorConfigs()
 	{
 		Random rand = new Random();
@@ -120,7 +140,6 @@ public class Operators {
 		int randomBlueIndex = rand.nextInt(6);
 		setColor(colorValues[randomRedIndex], colorValues[randomGreenIndex],
 				colorValues[randomBlueIndex]);
-		
 	}
 
 }
