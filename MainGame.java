@@ -13,8 +13,8 @@ public class MainGame extends JPanel implements KeyListener {
 	
 	//public Operators operator;
 	//canvas configurations
-	public static int canvas_width = 1280;
-	public static int canvas_height = 640;
+	public static int canvas_width = 1024;
+	public static int canvas_height = 512;
 	
 	// fonts and colors
 	Color black = new Color(0,0,0);
@@ -166,16 +166,17 @@ public class MainGame extends JPanel implements KeyListener {
 	
 	public void makeOperators(Graphics g)
 	{
-		Random rand = new Random();
-		int[] colorValues =  {32, 64, 96, 192, 224, 256};
-		
-		//for (int i=0; i<4; i+=1)
+		Random rand = new Random();		
 			
+		// The dividers
 		Operators.operatorConfigs(); // make random configurations
 		int xPosition = rand.nextInt(20); // random x coordinate
 		makeDivider(g, 64*xPosition-32, 0, 95,95, 95); // spawn it
 		
-		//Operators.operatorConfigs();
+		Operators.editOperatorList(Operators.getDividersList()); // make space for the new item and put it in. 
+			
+		
+		//Operators.operatorConfigs(); 
 		//xPosition = rand.nextInt(20);
 		//makeAdder(g, 0, 64*xPosition-32, 128, 31,31, 31);
 		
@@ -195,22 +196,24 @@ public class MainGame extends JPanel implements KeyListener {
 	{
 		//Random rand = new Random();
 		
+		for (int i = 0; i < 4; i+=1)
+		{
+			Operators.dividersList[i][1] += 1;
+			repaint();
+		}
+			
 		
 	}
 	
 	public void paintComponent(Graphics g)
-	{
-		//set colors
-
-		
-	
+	{	
 		// background
 		g.setColor(black);
 		g.fillRect(0, 0, canvas_width, canvas_height);
 		
 		g.setColor(white);
 		
-		//drawBgLines(g);
+		drawBgLines(g);
 		
 		
 		makePlayer(g, player1.getX(), getY());
@@ -251,18 +254,21 @@ public class MainGame extends JPanel implements KeyListener {
 	
 
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode()==KeyEvent.VK_W)
+		if ((e.getKeyCode()==KeyEvent.VK_W || e.getKeyCode()==KeyEvent.VK_UP) &&
+				player1.getY() > 32)
 		{
 			System.out.print("Jordan, ");
 			player1.raisePlayerY(-8);
 			repaint();			
 		}
-		if (e.getKeyCode()==KeyEvent.VK_A)
+		if ((e.getKeyCode()==KeyEvent.VK_A || e.getKeyCode()==KeyEvent.VK_LEFT) &&
+				player1.getX() > 32)
 		{
 			System.out.print("that ");
 			player1.raisePlayerX(-8);
 			repaint();			}
-		if (e.getKeyCode()==KeyEvent.VK_S)
+		if ((e.getKeyCode()==KeyEvent.VK_S || e.getKeyCode()==KeyEvent.VK_DOWN) &&
+				player1.getY() < getCanvasHeight()-32)
 		{
 			System.out.print("is ");
 
@@ -270,7 +276,9 @@ public class MainGame extends JPanel implements KeyListener {
 			repaint();	
 
 		}
-		if (e.getKeyCode()==KeyEvent.VK_D)
+		if ((e.getKeyCode()==KeyEvent.VK_D || e.getKeyCode()==KeyEvent.VK_RIGHT) &&
+				player1.getX() < getCanvasWidth()-32)
+
 		{
 			System.out.print("enough!");
 			player1.raisePlayerX(8);

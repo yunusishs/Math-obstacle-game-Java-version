@@ -11,11 +11,11 @@ public class Operators {
 	public static int blue = 0;
 	
 	public static int[][] dividersList = {
-			//{x, y}
-			{0, 0},
-			{0, 0},
-			{0, 0},
-			{0, 0},
+			//{0=x, 1=y, 2=red, 3=green, 4=blue}
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
 	};
 	
 
@@ -92,6 +92,10 @@ public class Operators {
 		return blue;
 	}
 
+	public static int[][] getDividersList()
+	{
+		return dividersList;
+	}
 
 	public static void setCoords(int xCoord, int yCoord)
 	{
@@ -116,13 +120,21 @@ public class Operators {
 		timesBy = timesValue;
 	}
 	
-	public static void editOperatorList(int[] listName) 
+	public static void editOperatorList(int[][] listName) 
 	{
-		for (int i=0; i<4; i+=1)
+		for (int i=0; i<4; i+=1) // this makes space for the new item
 		{
-			//listName[operatorIndex] = {}
+			if (i < 4)
+				listName[i] = listName[i+1];
 		}
+		
+		listName[0][0] = getX(); // put the new item in.
+		listName[0][1] = getY();
+		listName[0][2] = getRed();
+		listName[0][3] = getGreen();
+		listName[0][4] = getBlue();
 	}
+	
 	
 			
 	public static void operatorConfigs()
