@@ -18,10 +18,6 @@ public class Operators {
 			{0, 0, 0, 0, 0},
 	};
 	
-
-	
-
-	
 	public void createAdder(int xCoord, int yCoord, int addValue, int r, int g, int b)
 	{
 		opX = xCoord;
@@ -125,7 +121,9 @@ public class Operators {
 		for (int i=0; i<4; i+=1) // this makes space for the new item
 		{
 			if (i < 4)
-				listName[i] = listName[i+1];
+				for (int j = 0; j <5; j+=1)
+					
+					listName[i][j] = listName[i+1][j];
 		}
 		
 		listName[0][0] = getX(); // put the new item in.
@@ -142,8 +140,8 @@ public class Operators {
 		Random rand = new Random();
 		
 		// set position
-		int xPosition = rand.nextInt(20);
-		setCoords(64*xPosition-32, 128);
+		int opX = rand.nextInt(20);
+		setCoords(64*opX-32, 128);
 	
 		// set color
 		int[] colorValues =  {32, 64, 96, 192, 224, 256};
@@ -154,4 +152,14 @@ public class Operators {
 				colorValues[randomBlueIndex]);
 	}
 
+	public static void makeOperators()
+	{
+		Random rand = new Random();		
+	
+		// The dividers
+		operatorConfigs(); // make random configurations
+		opX = rand.nextInt(20); // random x coordinate		
+		editOperatorList(dividersList); // make space for the new item and put it in. 
+		
+	}
 }
