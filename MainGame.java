@@ -2,6 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Random;
+import java.io.*;
 
 /**
  * 
@@ -22,8 +23,11 @@ public class MainGame extends JPanel implements KeyListener {
 	Font opFont = new Font("Cambria Math", Font.ITALIC, 40);
 	Font playerFont = new Font("Cambria Math", Font.ITALIC, 40);
 	Font statsFont = new Font("Cambria Math", Font.ITALIC, 32);
+	
 
 	private Player player1;
+	
+	
 
 	
 	public static int getCanvasWidth()
@@ -39,11 +43,13 @@ public class MainGame extends JPanel implements KeyListener {
 	public void init()
 	{
 		player1 = new Player(MainGame.getCanvasWidth()/2, MainGame.getCanvasHeight()/2);
+		tickTimer();
 	}
 
 	public MainGame()
 	{
 		addKeyListener(this);
+		
 	}
 	// method to make the player
 	
@@ -164,33 +170,18 @@ public class MainGame extends JPanel implements KeyListener {
 		g.drawLine(i, 0, i, canvas_height);
 	}
 	
-	public void makeOperators(Graphics g)
-	{
-		Random rand = new Random();		
+	public int timer=1000001;
+	public void tickTimer() {
+		int k;
+		for (k=0; k==Integer.MAX_VALUE; k++) {
 			
-		// The dividers
-		Operators.operatorConfigs(); // make random configurations
-		int xPosition = rand.nextInt(20); // random x coordinate
-		makeDivider(g, 64*xPosition-32, 0, 95,95, 95); // spawn it
+		timer--;
+		//try { Thread.sleep(1000); }
 		
-		Operators.editOperatorList(Operators.getDividersList()); // make space for the new item and put it in. 
-			
-		
-		//Operators.operatorConfigs(); 
-		//xPosition = rand.nextInt(20);
-		//makeAdder(g, 0, 64*xPosition-32, 128, 31,31, 31);
-		
-		//xPosition = rand.nextInt(20);
-		//makeMultiplier(g, 0, 64*xPosition-32, 128, 63,63, 63);
-		//xPosition = rand.nextInt(20);
-		//makeDivider(g, 64*xPosition-32, 128, 95,95, 95);
-		//xPosition = rand.nextInt(20);
-		//makeSquare(g, 64*xPosition-32, 128, 223,223, 223);
-		//xPosition = rand.nextInt(20);
-		//makeCube(g, 64*xPosition-32, 128, 255,255, 255);
-		
-		
-	}
+		//catch (Exception e) {}
+		System.out.println(timer);
+		}
+		}
 	
 	public void moveOperators(Graphics g)
 	{
@@ -223,6 +214,34 @@ public class MainGame extends JPanel implements KeyListener {
 		g.setColor(new Color(0,0,0));
 		g.setFont(statsFont);
 		g.drawString("x="+player1.getScore(),canvas_width/2, canvas_height+64);
+		
+		
+		if (timer%2 == 0) {
+		Random rand = new Random();		
+		
+		System.out.println("Timer even");
+		// The dividers
+		Operators.operatorConfigs(); // make random configurations
+		int xPosition = rand.nextInt(20); // random x coordinate
+		makeDivider(g, 64*xPosition-32, 100, 95,95, 95); // spawn it
+		
+		Operators.editOperatorList(Operators.getDividersList()); // make space for the new item and put it in. 
+			
+		
+		//Operators.operatorConfigs(); 
+		//xPosition = rand.nextInt(20);
+		//makeAdder(g, 0, 64*xPosition-32, 128, 31,31, 31);
+		
+		//xPosition = rand.nextInt(20);
+		//makeMultiplier(g, 0, 64*xPosition-32, 128, 63,63, 63);
+		//xPosition = rand.nextInt(20);
+		//makeDivider(g, 64*xPosition-32, 128, 95,95, 95);
+		//xPosition = rand.nextInt(20);
+		//makeSquare(g, 64*xPosition-32, 128, 223,223, 223);
+		//xPosition = rand.nextInt(20);
+		//makeCube(g, 64*xPosition-32, 128, 255,255, 255);
+		}
+		
 	
 	}
 	
@@ -245,6 +264,8 @@ public class MainGame extends JPanel implements KeyListener {
 		panel.init();
 		panel.setFocusable(true);
 		window.add(panel);
+		
+		
 		
 		//Decide on a 'relative' starting location for the window
 		window.setLocationRelativeTo(null);
