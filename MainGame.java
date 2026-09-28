@@ -22,11 +22,10 @@ public class MainGame extends JPanel implements KeyListener {
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					System.out.println("One tick of the clock");
+					//System.out.println("One tick of the clock");
 					Operators.makeOperators();
 					
-	
-					//repaint();
+					repaint();
 				}
 			};
 	
@@ -180,26 +179,7 @@ public class MainGame extends JPanel implements KeyListener {
 		g.drawLine(i, 0, i, canvas_height);
 	}
 	
-	public void refresh()
-	{
-		
-	}
-	
-			
-		
-		//Operators.operatorConfigs(); 
-		//xPosition = rand.nextInt(20);
-		//makeAdder(g, 0, 64*xPosition-32, 128, 31,31, 31);
-		
-		//xPosition = rand.nextInt(20);
-		//makeMultiplier(g, 0, 64*xPosition-32, 128, 63,63, 63);
-		//xPosition = rand.nextInt(20);
-		//makeDivider(g, 64*xPosition-32, 128, 95,95, 95);
-		//xPosition = rand.nextInt(20);
-		//makeSquare(g, 64*xPosition-32, 128, 223,223, 223);
-		//xPosition = rand.nextInt(20);
-		//makeCube(g, 64*xPosition-32, 128, 255,255, 255);
-		
+
 		
 	
 	
@@ -228,8 +208,14 @@ public class MainGame extends JPanel implements KeyListener {
 		
 		
 		makePlayer(g, player1.getX(), getY());
-		
-		
+		int[][] dividersList = Operators.getDividersList();					
+
+		for (int i=0; i<4; i++) 
+		{
+			makeDivider(g, dividersList[i][0], dividersList[i][1], 
+					dividersList[i][2], dividersList[i][3], dividersList[i][4]);
+
+		}
 		//score display
 		g.setColor(new Color(0,0,0));
 		g.setFont(statsFont);

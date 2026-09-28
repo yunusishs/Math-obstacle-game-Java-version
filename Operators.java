@@ -1,5 +1,4 @@
 import java.util.Random;
-
 public class Operators {
 
 	public static int opX = 0;
@@ -12,10 +11,11 @@ public class Operators {
 	
 	public static int[][] dividersList = {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
+			
+			{1, 2, 3, 4, 5},
+			{2, 7, 8, 9, 10},
+			{3, 12, 13, 14, 15},
+			{4, 17, 18, 19, 20},
 	};
 	
 	public void createAdder(int xCoord, int yCoord, int addValue, int r, int g, int b)
@@ -54,6 +54,11 @@ public class Operators {
 		red = r;
 		green = g;
 		blue = b;
+	}
+	
+	public int[][] getDividers()
+	{
+		return dividersList;
 	}
 	
 	public static int getX()
@@ -118,19 +123,22 @@ public class Operators {
 	
 	public static void editOperatorList(int[][] listName) 
 	{
-		for (int i=0; i<4; i+=1) // this makes space for the new item
+		for (int i=3; i>0; i--) // this makes space for the new item
 		{
-			if (i < 4)
-				for (int j = 0; j <5; j+=1)
-					
-					listName[i][j] = listName[i+1][j];
+			for (int j = 0; j <5; j+=1) // item properties
+			{
+				listName[i][j] = listName[i-1][j];
+			}
 		}
 		
+
 		listName[0][0] = getX(); // put the new item in.
 		listName[0][1] = getY();
 		listName[0][2] = getRed();
 		listName[0][3] = getGreen();
 		listName[0][4] = getBlue();
+		System.out.println(listName[0][0]+","+listName[1][0]+","+listName[2][0]+","+listName[3][0]);
+
 	}
 	
 	
@@ -144,7 +152,7 @@ public class Operators {
 		setCoords(64*opX-32, 128);
 	
 		// set color
-		int[] colorValues =  {32, 64, 96, 192, 224, 256};
+		int[] colorValues =  {31, 63, 95, 191, 223, 255};
 		int randomRedIndex = rand.nextInt(6);
 		int randomGreenIndex = rand.nextInt(6);
 		int randomBlueIndex = rand.nextInt(6);
@@ -154,12 +162,11 @@ public class Operators {
 
 	public static void makeOperators()
 	{
-		Random rand = new Random();		
 	
 		// The dividers
 		operatorConfigs(); // make random configurations
-		opX = rand.nextInt(20); // random x coordinate		
 		editOperatorList(dividersList); // make space for the new item and put it in. 
+		
 		
 	}
 }
