@@ -17,15 +17,28 @@ public class MainGame extends JPanel implements KeyListener {
 	public static int canvas_width = 1024;
 	public static int canvas_height = 512;
 	public Timer timer;
-	
+	public int mSeconds = 0;
 	ActionListener taskPerformer = new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
 				{
+					mSeconds +=1; // adds one millisecond to the timer
 					//System.out.println("One tick of the clock");
-					Operators.makeOperators();
+					if (mSeconds%1024==0) //when all the operators get made
+					{
+						System.out.println("dd");
+						Operators.makeOperators();
+					}
+					if (mSeconds%64==0) //when all the operators are moving
+					{
 					
+						for (int i = 0; i < 4; i+=1)
+							{
+							//Operators.dividersList[i][1] += 1;
+							}
+					}
 					repaint();
+
 				}
 			};
 	
@@ -52,7 +65,7 @@ public class MainGame extends JPanel implements KeyListener {
 	public void init()
 	{
 		player1 = new Player(MainGame.getCanvasWidth()/2, MainGame.getCanvasHeight()/2);
-		timer = new Timer(1000,taskPerformer);
+		timer = new Timer(1,taskPerformer);
 		timer.start();
 	}
 
@@ -80,15 +93,15 @@ public class MainGame extends JPanel implements KeyListener {
 			int red, int green, int blue)
 	{
 		//division box
-		g.setColor(new Color(Operators.getRed(), Operators.getGreen(), Operators.getBlue()));
-		g.fillRect(Operators.getX()-32, Operators.getY()-32, 64, 64);
+		g.setColor(new Color(red, green, blue));
+		g.fillRect(xCoord-32, yCoord-32, 64, 64);
 		
 		//division text
 		char divisionChar = (char) 247;
 		String divisionString = String.valueOf(divisionChar);
-		g.setColor(new Color(255-Operators.getRed(), 255-Operators.getGreen(), 255-Operators.getBlue()));
+		g.setColor(new Color(255-red, green, 255-blue));
 		g.setFont(opFont);
-		g.drawString(divisionString+"0",Operators.getX()-24, Operators.getY()+12);
+		g.drawString(divisionString+"0",xCoord-24, yCoord+12);
 	}
 	
 	// method to make adders
@@ -179,23 +192,24 @@ public class MainGame extends JPanel implements KeyListener {
 		g.drawLine(i, 0, i, canvas_height);
 	}
 	
+	public void spawnOperators(Graphics g)
+	{
+		//for (int i=0; i<4; i++) 
+		//{
+		//	int[][] dividersList = Operators.getDividersList();					
+		//	makeDivider(g, dividersList[i][0], dividersList[i][1], 
+		//			dividersList[i][2], dividersList[i][3], dividersList[i][4]);
+		//
+
+		//}
+		int[][] dividersList = Operators.getDividersList();					
+		makeDivider(g, dividersList[0][0], dividersList[0][1], 
+				dividersList[0][2], dividersList[0][3], dividersList[0][4]);
+		makeDivider(g, dividersList[1][0], dividersList[1][1], 
+				dividersList[1][2], dividersList[1][3], dividersList[1][4]);
+	}
 
 		
-	
-	
-	public void moveOperators(Graphics g)
-	{
-		//Random rand = new Random();
-		
-		for (int i = 0; i < 4; i+=1)
-		{
-			Operators.dividersList[i][1] += 1;
-			repaint();
-		}
-			
-		
-	}
-	
 	public void paintComponent(Graphics g)
 	{	
 		// background
@@ -208,12 +222,16 @@ public class MainGame extends JPanel implements KeyListener {
 		
 		
 		makePlayer(g, player1.getX(), getY());
-		int[][] dividersList = Operators.getDividersList();					
 
+		//spawnOperators(g);
+		System.out.println("");	
 		for (int i=0; i<4; i++) 
 		{
+			int[][] dividersList = Operators.getDividersList();
 			makeDivider(g, dividersList[i][0], dividersList[i][1], 
 					dividersList[i][2], dividersList[i][3], dividersList[i][4]);
+			//System.out.println(dividersList[i][0]+" "+dividersList[i][1]+" "+ 
+					//dividersList[i][2]+" "+ dividersList[i][3]+" "+ dividersList[i][4]);
 
 		}
 		//score display

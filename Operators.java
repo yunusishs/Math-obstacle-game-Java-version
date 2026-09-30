@@ -12,10 +12,10 @@ public class Operators {
 	public static int[][] dividersList = {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
-			{1, 2, 3, 4, 5},
-			{2, 7, 8, 9, 10},
-			{3, 12, 13, 14, 15},
-			{4, 17, 18, 19, 20},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
 	};
 	
 	public void createAdder(int xCoord, int yCoord, int addValue, int r, int g, int b)
@@ -137,7 +137,7 @@ public class Operators {
 		listName[0][2] = getRed();
 		listName[0][3] = getGreen();
 		listName[0][4] = getBlue();
-		System.out.println(listName[0][0]+","+listName[1][0]+","+listName[2][0]+","+listName[3][0]);
+		//System.out.println(listName[0][0]+","+listName[1][0]+","+listName[2][0]+","+listName[3][0]);
 
 	}
 	
@@ -148,7 +148,7 @@ public class Operators {
 		Random rand = new Random();
 		
 		// set position
-		int opX = rand.nextInt(20);
+		int opX = rand.nextInt(16)+1;
 		setCoords(64*opX-32, 128);
 	
 		// set color
@@ -160,7 +160,7 @@ public class Operators {
 				colorValues[randomBlueIndex]);
 	}
 
-	public static void makeOperators()
+	public static void makeOperators() // this makes their variables but does not spawn them
 	{
 	
 		// The dividers
