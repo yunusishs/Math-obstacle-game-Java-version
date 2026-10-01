@@ -34,14 +34,9 @@ public class MainGame extends JPanel implements KeyListener {
 						}
 						if (mSeconds%64==0) //when all the operators are moving
 						{
-					
-						for (int i = 0; i < 4; i+=1)
-						{
-							Operators.dividersList[i][1] += 4;
+							moveOperators();
 						}
-						checkHits();
-
-					}
+					checkHits();
 					repaint();
 					}
 				}
@@ -111,20 +106,18 @@ public class MainGame extends JPanel implements KeyListener {
 	
 	// method to make adders
 	
-	public void makeAdder(Graphics g, int addValue, int xCoord, int yCoord, 
+	public void makeAdder(Graphics g, int xCoord, int yCoord, int addValue, 
 			int red, int green, int blue)
 	{
 		//adder box
-		Operators.setCoords(xCoord, yCoord);
-		Operators.setColor(red, green, blue);
-		g.setColor(new Color(Operators.getRed(), Operators.getGreen(), Operators.getBlue()));
-		g.fillRect(Operators.getX()-32, Operators.getY()-32, 64, 64);
+		g.setColor(new Color(red, green, blue));
+		g.fillRect(xCoord-32, yCoord-32, 64, 64);
 		
 		//adder text
 		Operators.setAddValue(addValue);
-		g.setColor(new Color(255-Operators.getRed(), 255-Operators.getGreen(), 255-Operators.getBlue()));
+		g.setColor(new Color(255-red, 255-green, 255-blue));
 		g.setFont(opFont);
-		g.drawString("+"+Operators.getAddValue(),Operators.getX()-32, Operators.getY()+12);
+		g.drawString("+"+addValue,xCoord-32, yCoord+12);
 	}
 	
 	// method to make multipliers
@@ -151,19 +144,18 @@ public class MainGame extends JPanel implements KeyListener {
 	
 	public void makeSquare(Graphics g, int xCoord, int yCoord, 
 			int red, int green, int blue)
-	{		
+	{	
+		
 		//square box
-		Operators.setCoords(xCoord, yCoord);
-		Operators.setColor(red, green, blue);
-		g.setColor(new Color(Operators.getRed(), Operators.getGreen(), Operators.getBlue()));
-		g.fillRect(Operators.getX()-32, Operators.getY()-32, 64, 64);
+		g.setColor(new Color(red, green, blue));
+		g.fillRect(xCoord-32, yCoord-32, 64, 64);
 		
 		//square text
 		char squareChar = (char) 178;
 		String squareString = String.valueOf(squareChar);
-		g.setColor(new Color(255-Operators.getRed(), 255-Operators.getGreen(), 255-Operators.getBlue()));
+		g.setColor(new Color(255-red, 255-green, 255-blue));
 		g.setFont(opFont);
-		g.drawString("x"+squareString,Operators.getX()-16, Operators.getY()+12);
+		g.drawString("x"+squareString,xCoord-16, yCoord+12);
 	}
 	
 	//method to make cubes
@@ -198,19 +190,40 @@ public class MainGame extends JPanel implements KeyListener {
 	  	return ydistance < distance; // check if the difference is close enough
 	}
 	
+	public boolean collision(int[][] listName)
+	{
+		boolean isCollision = false;
+		for (int i=0; i<4; i+=1)
+		{
+			if (xCollision(listName[i][0], player1.getX(), 64)
+					&& xCollision(listName[i][1], player1.getY(), 64))
+			{
+				return isCollision = true;
+			}
+		}
+		return isCollision;
+	}
+	
 	public void checkHits()
 	{
 		// loops done through each operator list to check if the player's coordinates touch an operator's coordinates
-		for (int i = 0; i < 4; i+=1)
+		if (collision(Operators.getDividersList()))
 		{
-			if (xCollision(Operators.getDividersList()[i][0], player1.getX(), 64)
-					&& xCollision(Operators.getDividersList()[i][1], player1.getY(), 64))
-					{
-						gameOver = true;
-					}
+			gameOver = true;
 		}
+		collision(Operators.getSquaresList());
+
 	}
 	
+	public void moveOperators()
+	{
+		for (int i = 0; i < 4; i+=1)
+		{
+			Operators.dividersList[i][1] += 4;
+
+			Operators.squaresList[i][1] += 4;
+		}	
+	}
 	// these lines are not necessary
 
 	public void drawBgLines(Graphics g) {
@@ -241,15 +254,33 @@ public class MainGame extends JPanel implements KeyListener {
 		makePlayer(g, player1.getX(), getY());
 
 		//spawnOperators(g);
-		System.out.println("");	
+		int[][] dividersList = Operators.getDividersList();
+		
 		for (int i=0; i<4; i++) 
 		{
-			if (Operators.getDividersList()[i][0] != 0) {
-				int[][] dividersList = Operators.getDividersList();
+			if (dividersList[i][0] != 0) {
 				makeDivider(g, dividersList[i][0], dividersList[i][1], 
 					dividersList[i][2], dividersList[i][3], dividersList[i][4]);
-			//System.out.println(dividersList[i][0]+" "+dividersList[i][1]+" "+ 
-					//dividersList[i][2]+" "+ dividersList[i][3]+" "+ dividersList[i][4]);
+			}
+		}
+		
+		int[][] addersList = Operators.getAddersList();
+		
+		for (int i=0; i<4; i++) 
+		{
+			if (addersList[i][0] != 0) {
+				makeAdder(g, addersList[i][0], addersList[i][1], 
+						addersList[i][2], addersList[i][3], addersList[i][4], addersList[i][5]);
+			}
+		}
+		
+		int[][] squaresList = Operators.getSquaresList();
+		
+		for (int i=0; i<4; i++) 
+		{
+			if (squaresList[i][0] != 0) {
+				makeSquare(g, squaresList[i][0], squaresList[i][1], 
+						squaresList[i][2], squaresList[i][3], squaresList[i][4]);
 			}
 		}
 		
@@ -257,7 +288,7 @@ public class MainGame extends JPanel implements KeyListener {
 		{
 			g.setColor(new Color(255,0,0));
 			g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
-			g.drawString("Game over",player1.getX(), player1.getY());
+			g.drawString("Game Over",player1.getX(), player1.getY());
 		}
 		//score display
 		g.setColor(new Color(0,0,0));

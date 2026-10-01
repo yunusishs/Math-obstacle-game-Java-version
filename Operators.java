@@ -18,6 +18,39 @@ public class Operators {
 			{0, 0, 0, 0, 0},
 	};
 	
+	public static int[][] addersList = {
+			//{0=x, 1=y, 2=addvalue, 3=red, 4=green, 5=blue}
+			
+			{0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0},
+	};
+
+	public static int[][] squaresList = {
+			//{0=x, 1=y, 2=red, 3=green, 4=blue}
+			
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+	};
+	
+	public static int[][] getDividersList()
+	{
+		return dividersList;
+	}
+	
+	public static int[][] getAddersList()
+	{
+		return addersList;
+	}
+
+	public static int[][] getSquaresList()
+	{
+		return squaresList;
+	}
+	
 	public void createAdder(int xCoord, int yCoord, int addValue, int r, int g, int b)
 	{
 		opX = xCoord;
@@ -56,11 +89,6 @@ public class Operators {
 		blue = b;
 	}
 	
-	public int[][] getDividers()
-	{
-		return dividersList;
-	}
-	
 	public static int getX()
 	{
 		return opX;
@@ -93,10 +121,7 @@ public class Operators {
 		return blue;
 	}
 
-	public static int[][] getDividersList()
-	{
-		return dividersList;
-	}
+
 
 	public static void setCoords(int xCoord, int yCoord)
 	{
@@ -125,18 +150,41 @@ public class Operators {
 	{
 		for (int i=3; i>0; i--) // this makes space for the new item
 		{
-			for (int j = 0; j <5; j+=1) // item properties
+			if (listName == addersList)
 			{
-				listName[i][j] = listName[i-1][j];
+				for (int j = 0; j <6; j+=1) // item properties
+				{
+					listName[i][j] = listName[i-1][j];
+				}
+			}
+			
+			else
+			{
+				for (int j = 0; j <5; j+=1) // item properties
+				{
+					listName[i][j] = listName[i-1][j];
+				}
 			}
 		}
 		
+		if (listName == addersList)
+		{
+			listName[0][0] = getX(); // put the new item in.
+			listName[0][1] = getY();
+			listName[0][2] = getAddValue();
+			listName[0][3] = getRed();
+			listName[0][3] = getGreen();
+			listName[0][4] = getBlue();
 
-		listName[0][0] = getX(); // put the new item in.
-		listName[0][1] = getY();
-		listName[0][2] = getRed();
-		listName[0][3] = getGreen();
-		listName[0][4] = getBlue();
+		}
+		else
+		{
+			listName[0][0] = getX(); // put the new item in.
+			listName[0][1] = getY();
+			listName[0][2] = getRed();
+			listName[0][3] = getGreen();
+			listName[0][4] = getBlue();
+		}
 		//System.out.println(listName[0][0]+","+listName[1][0]+","+listName[2][0]+","+listName[3][0]);
 
 	}
@@ -167,6 +215,12 @@ public class Operators {
 		operatorConfigs(); // make random configurations
 		editOperatorList(dividersList); // make space for the new item and put it in. 
 		
+		// The adders
+		operatorConfigs(); // make random configurations
+		editOperatorList(addersList);		
 		
+		// The squares
+		operatorConfigs(); // make random configurations
+		editOperatorList(squaresList);		
 	}
 }
