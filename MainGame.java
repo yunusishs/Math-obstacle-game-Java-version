@@ -18,7 +18,8 @@ public class MainGame extends JPanel implements KeyListener {
 	public static int canvas_height = 512;
 	public Timer timer;
 	public int mSeconds = 0;
-	public boolean gameOver = false;   
+	public boolean gameOver = false;
+	public int playerSpeed = 8;   
 	
 	ActionListener taskPerformer = new ActionListener()
 			{
@@ -167,18 +168,17 @@ public class MainGame extends JPanel implements KeyListener {
 	
 	public void makeCube(Graphics g, int xCoord, int yCoord, 
 			int red, int green, int blue)
-	{	//cube box
-		Operators.setCoords(xCoord, yCoord);
-		Operators.setColor(red, green, blue);
-		g.setColor(new Color(Operators.getRed(), Operators.getGreen(), Operators.getBlue()));
-		g.fillRect(Operators.getX()-32, Operators.getY()-32, 64, 64);
+	{	
+		//cube box
+		g.setColor(new Color(red, green, blue));
+		g.fillRect(xCoord-32, yCoord-32, 64, 64);
 		
 		//cube text
 		char cubeChar = (char) 179;
 		String cubeString = String.valueOf(cubeChar);
-		g.setColor(new Color(255-Operators.getRed(), 255-Operators.getGreen(), 255-Operators.getBlue()));
+		g.setColor(new Color(255-red, 255-green, 255-blue));
 		g.setFont(opFont);
-		g.drawString("x"+cubeString,Operators.getX()-16, Operators.getY()+12);
+		g.drawString("x"+cubeString,xCoord-16, yCoord+12);
 	}
 	
 	//methods that return whether there is collision
@@ -215,6 +215,10 @@ public class MainGame extends JPanel implements KeyListener {
 				{
 					Player.setScore(Player.getScore()*Player.getScore());
 				}
+				if (listName == Operators.getCubesList())
+				{
+					Player.setScore(Player.getScore()*Player.getScore()*Player.getScore());
+				}
 				for (int j = 0; j < 4; j+=1) // if it is an adder or multiplier it does not matter if the blue value doe not get turned to 0
 				{	listName[i][j] = 0;
 				}
@@ -232,6 +236,7 @@ public class MainGame extends JPanel implements KeyListener {
 		if (collision(Operators.getDividersList()))
 		{
 			gameOver = true;
+			playerSpeed = 0;
 		}
 		if (collision(Operators.getAddersList()))
 		{
@@ -242,6 +247,10 @@ public class MainGame extends JPanel implements KeyListener {
 			
 		}
 		if (collision(Operators.getSquaresList()))
+		{
+	
+		}
+		if (collision(Operators.getCubesList()))
 		{
 	
 		}
@@ -320,12 +329,22 @@ public class MainGame extends JPanel implements KeyListener {
 						squaresList[i][2], squaresList[i][3], squaresList[i][4]);
 			}
 		}
+
+		int[][] cubesList = Operators.getCubesList();
+		
+		for (int i=0; i<4; i++) 
+		{
+			if (squaresList[i][0] != 0) {
+				makeCube(g, cubesList[i][0], cubesList[i][1], 
+						cubesList[i][2], cubesList[i][3], cubesList[i][4]);
+			}
+		}
 		
 		if (gameOver)
 		{
 			g.setColor(new Color(255,0,0));
 			g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
-			g.drawString("Game Over",Player.getX(), Player.getY());
+			g.drawString("Game Over",canvas_width/2, canvas_height/2);
 		}
 		//score display
 		g.setColor(new Color(0,0,0));
@@ -365,19 +384,19 @@ public class MainGame extends JPanel implements KeyListener {
 		if ((e.getKeyCode()==KeyEvent.VK_W || e.getKeyCode()==KeyEvent.VK_UP) &&
 				Player.getY() > 32)
 		{
-			Player.raisePlayerY(-8);
+			Player.raisePlayerY(-playerSpeed);
 			repaint();			
 		}
 		if ((e.getKeyCode()==KeyEvent.VK_A || e.getKeyCode()==KeyEvent.VK_LEFT) &&
 				Player.getX() > 32)
 		{
-			Player.raisePlayerX(-8);
+			Player.raisePlayerX(-playerSpeed);
 			repaint();			}
 		if ((e.getKeyCode()==KeyEvent.VK_S || e.getKeyCode()==KeyEvent.VK_DOWN) &&
 				Player.getY() < getCanvasHeight()-32)
 		{
 
-			Player.raisePlayerY(8);
+			Player.raisePlayerY(playerSpeed);
 			repaint();	
 
 		}
@@ -385,7 +404,7 @@ public class MainGame extends JPanel implements KeyListener {
 				Player.getX() < getCanvasWidth()-32)
 
 		{
-			Player.raisePlayerX(8);
+			Player.raisePlayerX(playerSpeed);
 			repaint();	
 		}
 	}

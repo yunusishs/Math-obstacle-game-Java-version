@@ -44,6 +44,15 @@ public class Operators {
 			{0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0},
 	};
+
+	public static int[][] cubesList = {
+			//{0=x, 1=y, 2=red, 3=green, 4=blue}
+			
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+	};
 	
 	public static int[][] getDividersList()
 	{
@@ -62,6 +71,11 @@ public class Operators {
 	public static int[][] getSquaresList()
 	{
 		return squaresList;
+	}
+
+	public static int[][] getCubesList()
+	{
+		return cubesList;
 	}
 	
 	public void createAdder(int xCoord, int yCoord, int addValue, int r, int g, int b)
@@ -256,6 +270,11 @@ public class Operators {
 		operatorConfigs(); // make random configurations
 		opY = -224;
 		editOperatorList(squaresList);		
+
+		// The cubes
+		operatorConfigs(); // make random configurations
+		opY = -288;
+		editOperatorList(cubesList);		
 	}
 	
 	public static void moveOperators()
@@ -266,6 +285,7 @@ public class Operators {
 			addersList[i][1] += 4;
 			multipliersList[i][1] += 4;
 			squaresList[i][1] += 4;
+			cubesList[i][1] += 4;
 		}	
 	}
 }
