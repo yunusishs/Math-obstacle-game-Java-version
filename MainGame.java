@@ -28,13 +28,13 @@ public class MainGame extends JPanel implements KeyListener {
 					{
 						mSeconds +=64; // adds 16 milliseconds to the timer
 						//System.out.println(mSeconds);
-						if (mSeconds%1024==0) //when all the operators get made
+						if (mSeconds%6144==0) //when all the operators get made
 						{
 							Operators.makeOperators();
 						}
 						if (mSeconds%64==0) //when all the operators are moving
 						{
-							moveOperators();
+							Operators.moveOperators();
 						}
 					checkHits();
 					repaint();
@@ -80,12 +80,12 @@ public class MainGame extends JPanel implements KeyListener {
 	{
 		// player box
 		g.setColor(new Color(0,0,255));
-		g.fillRect(player1.getX()-32, player1.getY()-32, 64, 64);
+		g.fillRect(Player.getX()-32, Player.getY()-32, 64, 64);
 
 		//player symbol
 		g.setColor(white);
 		g.setFont(playerFont);
-		g.drawString("x",player1.getX()-10,player1.getY()+10);
+		g.drawString("x",Player.getX()-10,Player.getY()+10);
 	}
 	// method to make dividers
 	
@@ -117,27 +117,32 @@ public class MainGame extends JPanel implements KeyListener {
 		Operators.setAddValue(addValue);
 		g.setColor(new Color(255-red, 255-green, 255-blue));
 		g.setFont(opFont);
-		g.drawString("+"+addValue,xCoord-32, yCoord+12);
+		if (addValue < 0)
+		{
+			g.drawString(""+addValue,xCoord-32, yCoord+12);
+		}
+		else
+		{
+			g.drawString("+"+addValue,xCoord-32, yCoord+12);
+		}
 	}
 	
 	// method to make multipliers
 	
-	public void makeMultiplier(Graphics g, int timesValue, int xCoord, int yCoord,
+	public void makeMultiplier(Graphics g, int xCoord, int yCoord, int timesValue,
 			int red, int green, int blue)
 	{
 		//multiplier box
-		Operators.setCoords(xCoord, yCoord);
-		Operators.setColor(red, green, blue);
-		g.setColor(new Color(Operators.getRed(), Operators.getGreen(), Operators.getBlue()));
-		g.fillRect(Operators.getX()-32, Operators.getY()-32, 64, 64);
+		g.setColor(new Color(red, green, blue));
+		g.fillRect(xCoord-32, yCoord-32, 64, 64);
 	
 		//multiplier text
 		Operators.setTimesValue(timesValue);
 		char timesChar = (char) 215;
 		String timesString = String.valueOf(timesChar);
-		g.setColor(new Color(255-Operators.getRed(), 255-Operators.getGreen(), 255-Operators.getBlue()));
+		g.setColor(new Color(255-red, 255-green, 255-blue));
 		g.setFont(opFont);
-		g.drawString(timesString+Operators.getTimesValue(),Operators.getX()-32, Operators.getY()+12);
+		g.drawString(timesString+timesValue,xCoord-32, yCoord+12);
 	}
 	
 	//method to make squares
@@ -195,9 +200,26 @@ public class MainGame extends JPanel implements KeyListener {
 		boolean isCollision = false;
 		for (int i=0; i<4; i+=1)
 		{
-			if (xCollision(listName[i][0], player1.getX(), 64)
-					&& xCollision(listName[i][1], player1.getY(), 64))
+			if (xCollision(listName[i][0], Player.getX(), 64)
+					&& xCollision(listName[i][1], Player.getY(), 64))
 			{
+				if (listName == Operators.getAddersList())
+				{
+					Player.setScore(Player.getScore()+listName[i][2]);
+				}
+				if (listName == Operators.getMultipliersList())
+				{
+					Player.setScore(Player.getScore()*listName[i][2]);
+				}
+				if (listName == Operators.getSquaresList())
+				{
+					Player.setScore(Player.getScore()*Player.getScore());
+				}
+				for (int j = 0; j < 4; j+=1) // if it is an adder or multiplier it does not matter if the blue value doe not get turned to 0
+				{	listName[i][j] = 0;
+				}
+				
+
 				return isCollision = true;
 			}
 		}
@@ -211,19 +233,21 @@ public class MainGame extends JPanel implements KeyListener {
 		{
 			gameOver = true;
 		}
-		collision(Operators.getSquaresList());
+		if (collision(Operators.getAddersList()))
+		{
+			
+		}
+		if (collision(Operators.getMultipliersList()))
+		{
+			
+		}
+		if (collision(Operators.getSquaresList()))
+		{
+	
+		}
 
 	}
 	
-	public void moveOperators()
-	{
-		for (int i = 0; i < 4; i+=1)
-		{
-			Operators.dividersList[i][1] += 4;
-
-			Operators.squaresList[i][1] += 4;
-		}	
-	}
 	// these lines are not necessary
 
 	public void drawBgLines(Graphics g) {
@@ -247,11 +271,12 @@ public class MainGame extends JPanel implements KeyListener {
 		g.fillRect(0, 0, canvas_width, canvas_height);
 		
 		g.setColor(white);
-		
+		g.fillRect(0, canvas_height, canvas_width, canvas_height/4);
+
 		drawBgLines(g);
 		
 		
-		makePlayer(g, player1.getX(), getY());
+		makePlayer(g, Player.getX(), getY());
 
 		//spawnOperators(g);
 		int[][] dividersList = Operators.getDividersList();
@@ -271,9 +296,21 @@ public class MainGame extends JPanel implements KeyListener {
 			if (addersList[i][0] != 0) {
 				makeAdder(g, addersList[i][0], addersList[i][1], 
 						addersList[i][2], addersList[i][3], addersList[i][4], addersList[i][5]);
+				//System.out.println(addersList[i][0]+" "+ addersList[i][1]+" "+ 
+				//		addersList[i][2]+" "+  addersList[i][3]+" "+  addersList[i][4]+" "+  addersList[i][5]);
 			}
 		}
+
+		int[][] multipliersList = Operators.getMultipliersList();
 		
+		for (int i=0; i<4; i++) 
+		{
+			if (multipliersList[i][0] != 0) {
+				makeMultiplier(g, multipliersList[i][0], multipliersList[i][1], 
+						multipliersList[i][2], multipliersList[i][3], multipliersList[i][4], multipliersList[i][5]);
+			}
+		}
+			
 		int[][] squaresList = Operators.getSquaresList();
 		
 		for (int i=0; i<4; i++) 
@@ -288,12 +325,12 @@ public class MainGame extends JPanel implements KeyListener {
 		{
 			g.setColor(new Color(255,0,0));
 			g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
-			g.drawString("Game Over",player1.getX(), player1.getY());
+			g.drawString("Game Over",Player.getX(), Player.getY());
 		}
 		//score display
 		g.setColor(new Color(0,0,0));
 		g.setFont(statsFont);
-		g.drawString("x="+player1.getScore(),canvas_width/2, canvas_height+64);
+		g.drawString("x="+Player.getScore(),canvas_width/2, canvas_height+64);
 	
 	}
 	
@@ -326,29 +363,29 @@ public class MainGame extends JPanel implements KeyListener {
 
 	public void keyPressed(KeyEvent e) {
 		if ((e.getKeyCode()==KeyEvent.VK_W || e.getKeyCode()==KeyEvent.VK_UP) &&
-				player1.getY() > 32)
+				Player.getY() > 32)
 		{
-			player1.raisePlayerY(-8);
+			Player.raisePlayerY(-8);
 			repaint();			
 		}
 		if ((e.getKeyCode()==KeyEvent.VK_A || e.getKeyCode()==KeyEvent.VK_LEFT) &&
-				player1.getX() > 32)
+				Player.getX() > 32)
 		{
-			player1.raisePlayerX(-8);
+			Player.raisePlayerX(-8);
 			repaint();			}
 		if ((e.getKeyCode()==KeyEvent.VK_S || e.getKeyCode()==KeyEvent.VK_DOWN) &&
-				player1.getY() < getCanvasHeight()-32)
+				Player.getY() < getCanvasHeight()-32)
 		{
 
-			player1.raisePlayerY(8);
+			Player.raisePlayerY(8);
 			repaint();	
 
 		}
 		if ((e.getKeyCode()==KeyEvent.VK_D || e.getKeyCode()==KeyEvent.VK_RIGHT) &&
-				player1.getX() < getCanvasWidth()-32)
+				Player.getX() < getCanvasWidth()-32)
 
 		{
-			player1.raisePlayerX(8);
+			Player.raisePlayerX(8);
 			repaint();	
 		}
 	}

@@ -27,6 +27,15 @@ public class Operators {
 			{0, 0, 0, 0, 0, 0},
 	};
 
+	public static int[][] multipliersList = {
+			//{0=x, 1=y, 2=multiplyValue, 3=red, 4=green, 5=blue}
+			
+			{0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0},
+	};
+
 	public static int[][] squaresList = {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
@@ -45,7 +54,11 @@ public class Operators {
 	{
 		return addersList;
 	}
-
+	
+	public static int[][] getMultipliersList()
+	{
+		return multipliersList;
+	}
 	public static int[][] getSquaresList()
 	{
 		return squaresList;
@@ -150,7 +163,7 @@ public class Operators {
 	{
 		for (int i=3; i>0; i--) // this makes space for the new item
 		{
-			if (listName == addersList)
+			if (listName == addersList || listName == multipliersList)
 			{
 				for (int j = 0; j <6; j+=1) // item properties
 				{
@@ -173,9 +186,20 @@ public class Operators {
 			listName[0][1] = getY();
 			listName[0][2] = getAddValue();
 			listName[0][3] = getRed();
-			listName[0][3] = getGreen();
-			listName[0][4] = getBlue();
+			listName[0][4] = getGreen();
+			listName[0][5] = getBlue();
 
+		}
+
+		else if (listName == multipliersList)
+		{
+			listName[0][0] = getX(); // put the new item in.
+			listName[0][1] = getY();
+			listName[0][2] = getTimesValue();
+			listName[0][3] = getRed();
+			listName[0][4] = getGreen();
+			listName[0][5] = getBlue();
+ 
 		}
 		else
 		{
@@ -197,7 +221,7 @@ public class Operators {
 		
 		// set position
 		int opX = rand.nextInt(16)+1;
-		setCoords(64*opX-32, -32);
+		setCoords(64*opX-32, 0);
 	
 		// set color
 		int[] colorValues =  {31, 63, 95, 191, 223, 255};
@@ -210,17 +234,38 @@ public class Operators {
 
 	public static void makeOperators() // this makes their variables but does not spawn them
 	{
-	
+		Random rand = new Random();
 		// The dividers
 		operatorConfigs(); // make random configurations
+		opY = -32;
 		editOperatorList(dividersList); // make space for the new item and put it in. 
 		
 		// The adders
 		operatorConfigs(); // make random configurations
+		opY = -96; 
+		setAddValue(rand.nextInt(64)-32);
 		editOperatorList(addersList);		
 		
+		// the multipliers
+		operatorConfigs(); // make random configurations
+		opY = -160; 
+		setTimesValue(rand.nextInt(10));
+		editOperatorList(multipliersList);		
+
 		// The squares
 		operatorConfigs(); // make random configurations
+		opY = -224;
 		editOperatorList(squaresList);		
+	}
+	
+	public static void moveOperators()
+	{
+		for (int i = 0; i < 4; i+=1)
+		{
+			dividersList[i][1] += 4;
+			addersList[i][1] += 4;
+			multipliersList[i][1] += 4;
+			squaresList[i][1] += 4;
+		}	
 	}
 }

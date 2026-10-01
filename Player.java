@@ -14,12 +14,12 @@ public class Player {
 	
 	//getting the coords
 	
-	public int getX()
+	public static int getX()
 	{
 		return playerX;
 	}
 	
-	public int getY()
+	public static int getY()
 	{
 		return playerY;
 	}
@@ -42,11 +42,15 @@ public class Player {
 		
 	}
 	//score
-	public int getScore()
+	public static int getScore()
 	{
 		return score;
 	}
 	
+	public static void setScore(int setValue)
+	{
+		score = setValue;
+	}
 
 
 }
