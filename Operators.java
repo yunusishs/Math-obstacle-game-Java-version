@@ -149,7 +149,7 @@ public class Operators {
 		
 		// set position
 		int opX = rand.nextInt(16)+1;
-		setCoords(64*opX-32, 128);
+		setCoords(64*opX-32, -32);
 	
 		// set color
 		int[] colorValues =  {31, 63, 95, 191, 223, 255};

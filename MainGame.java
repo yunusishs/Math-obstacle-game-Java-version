@@ -18,27 +18,32 @@ public class MainGame extends JPanel implements KeyListener {
 	public static int canvas_height = 512;
 	public Timer timer;
 	public int mSeconds = 0;
+	public boolean gameOver = false;   
+	
 	ActionListener taskPerformer = new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					mSeconds +=1; // adds one millisecond to the timer
-					//System.out.println("One tick of the clock");
-					if (mSeconds%1024==0) //when all the operators get made
+					if (!gameOver)
 					{
-						System.out.println("dd");
-						Operators.makeOperators();
-					}
-					if (mSeconds%64==0) //when all the operators are moving
-					{
+						mSeconds +=64; // adds 16 milliseconds to the timer
+						//System.out.println(mSeconds);
+						if (mSeconds%1024==0) //when all the operators get made
+						{
+							Operators.makeOperators();
+						}
+						if (mSeconds%64==0) //when all the operators are moving
+						{
 					
 						for (int i = 0; i < 4; i+=1)
-							{
-							//Operators.dividersList[i][1] += 1;
-							}
+						{
+							Operators.dividersList[i][1] += 4;
+						}
+						checkHits();
+
 					}
 					repaint();
-
+					}
 				}
 			};
 	
@@ -65,7 +70,7 @@ public class MainGame extends JPanel implements KeyListener {
 	public void init()
 	{
 		player1 = new Player(MainGame.getCanvasWidth()/2, MainGame.getCanvasHeight()/2);
-		timer = new Timer(1,taskPerformer);
+		timer = new Timer(64,taskPerformer);
 		timer.start();
 	}
 
@@ -99,7 +104,7 @@ public class MainGame extends JPanel implements KeyListener {
 		//division text
 		char divisionChar = (char) 247;
 		String divisionString = String.valueOf(divisionChar);
-		g.setColor(new Color(255-red, green, 255-blue));
+		g.setColor(new Color(255-red, 255-green, 255-blue));
 		g.setFont(opFont);
 		g.drawString(divisionString+"0",xCoord-24, yCoord+12);
 	}
@@ -179,6 +184,33 @@ public class MainGame extends JPanel implements KeyListener {
 		g.drawString("x"+cubeString,Operators.getX()-16, Operators.getY()+12);
 	}
 	
+	//methods that return whether there is collision
+	
+	public boolean xCollision(int x1, int x2, int distance)
+	{
+	    int xdistance = Math.abs(x1 - x2); //find the difference
+	  	return xdistance < distance; // check if the difference is close enough
+	}
+	
+	public boolean yCollision(int y1, int y2, int distance)
+	{
+	    int ydistance = Math.abs(y1 - y2); //find the difference
+	  	return ydistance < distance; // check if the difference is close enough
+	}
+	
+	public void checkHits()
+	{
+		// loops done through each operator list to check if the player's coordinates touch an operator's coordinates
+		for (int i = 0; i < 4; i+=1)
+		{
+			if (xCollision(Operators.getDividersList()[i][0], player1.getX(), 64)
+					&& xCollision(Operators.getDividersList()[i][1], player1.getY(), 64))
+					{
+						gameOver = true;
+					}
+		}
+	}
+	
 	// these lines are not necessary
 
 	public void drawBgLines(Graphics g) {
@@ -192,22 +224,7 @@ public class MainGame extends JPanel implements KeyListener {
 		g.drawLine(i, 0, i, canvas_height);
 	}
 	
-	public void spawnOperators(Graphics g)
-	{
-		//for (int i=0; i<4; i++) 
-		//{
-		//	int[][] dividersList = Operators.getDividersList();					
-		//	makeDivider(g, dividersList[i][0], dividersList[i][1], 
-		//			dividersList[i][2], dividersList[i][3], dividersList[i][4]);
-		//
 
-		//}
-		int[][] dividersList = Operators.getDividersList();					
-		makeDivider(g, dividersList[0][0], dividersList[0][1], 
-				dividersList[0][2], dividersList[0][3], dividersList[0][4]);
-		makeDivider(g, dividersList[1][0], dividersList[1][1], 
-				dividersList[1][2], dividersList[1][3], dividersList[1][4]);
-	}
 
 		
 	public void paintComponent(Graphics g)
@@ -227,12 +244,20 @@ public class MainGame extends JPanel implements KeyListener {
 		System.out.println("");	
 		for (int i=0; i<4; i++) 
 		{
-			int[][] dividersList = Operators.getDividersList();
-			makeDivider(g, dividersList[i][0], dividersList[i][1], 
+			if (Operators.getDividersList()[i][0] != 0) {
+				int[][] dividersList = Operators.getDividersList();
+				makeDivider(g, dividersList[i][0], dividersList[i][1], 
 					dividersList[i][2], dividersList[i][3], dividersList[i][4]);
 			//System.out.println(dividersList[i][0]+" "+dividersList[i][1]+" "+ 
 					//dividersList[i][2]+" "+ dividersList[i][3]+" "+ dividersList[i][4]);
-
+			}
+		}
+		
+		if (gameOver)
+		{
+			g.setColor(new Color(255,0,0));
+			g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
+			g.drawString("Game over",player1.getX(), player1.getY());
 		}
 		//score display
 		g.setColor(new Color(0,0,0));
