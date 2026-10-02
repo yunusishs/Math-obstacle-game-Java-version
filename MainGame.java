@@ -1,8 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.Random;
-//import javax.swing.time
+
 
 /**
  * 
@@ -14,18 +13,25 @@ public class MainGame extends JPanel implements KeyListener {
 	
 	//public Operators operator;
 	//canvas configurations
+	
 	public static int canvas_width = 1024;
 	public static int canvas_height = 512;
+	
+	//public static int canvas_width;
+	//public static int canvas_height;
+	
 	public Timer timer;
 	public int mSeconds = 0;
-	public boolean gameRunning = true;
+	public boolean menuScreen = true;
+	public boolean gameOver = false;
 	public int playerSpeed = 8;   
+	public int goal = 0;
 	
 	ActionListener taskPerformer = new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					if (gameRunning)
+					if (!menuScreen && !gameOver)
 					{
 						mSeconds +=64; // adds 16 milliseconds to the timer
 						//System.out.println(mSeconds);
@@ -204,7 +210,7 @@ public class MainGame extends JPanel implements KeyListener {
 			{
 				if (listName == Operators.getDividersList())
 				{
-					gameRunning = false;
+					gameOver = true;
 					playerSpeed = 0;				}
 				if (listName == Operators.getAddersList())
 				{
@@ -216,17 +222,14 @@ public class MainGame extends JPanel implements KeyListener {
 				}
 				if (listName == Operators.getSquaresList())
 				{
-					System.out.println("Square hit: "+Player.getScore()*Player.getScore()+",");
-					Player.setScore(Player.getScore()*Player.getScore());
+					Player.setScore((int) Math.pow(Player.getScore(),2));
 				}
 				if (listName == Operators.getCubesList())
 				{
-					System.out.print("Cube hit: "+Player.getScore()*Player.getScore()+",");
-					System.out.println(Player.getScore()*Player.getScore()*Player.getScore());
-					Player.setScore(Player.getScore()*Player.getScore()*Player.getScore());
+					Player.setScore((int) Math.pow(Player.getScore(),3));
 				}
-				for (int j = 0; j < 4; j+=1) // if it is an adder or multiplier it does not matter if the blue value doe not get turned to 0
-				{	listName[i][j] = 0;
+				for (int j = 0; j < 2; j+=1) // if it is an adder or multiplier it does not matter only the coordinates matter
+					{	listName[i][j] = 0;
 				}
 				
 
@@ -252,98 +255,122 @@ public class MainGame extends JPanel implements KeyListener {
 	//horizontal lines
 	for (int i=64; i<canvas_height; i+=64)
 		g.drawLine(0, i, canvas_width, i);
-	g.drawLine(0, canvas_height/2, canvas_width, canvas_height/2);
+	//g.drawLine(0, canvas_height/2, canvas_width, canvas_height/2);
 	
 	//vertical lines
 	for (int i=64; i<canvas_width; i+=64)
 		g.drawLine(i, 0, i, canvas_height);
 	}
 	
+	public void mainMenuScreen(Graphics g) {
+		
+		//screen
+		g.setColor(black);
+		g.fillRect(0, 0, canvas_width, canvas_height*5/4);
+		
+		//text
+		g.setColor(white);
+
+		Font menuFont = new Font("consolas", Font.BOLD, 32);
+		g.setFont(menuFont);
+		g.drawString("Math Obstacle Game", canvas_width/2, canvas_height/2-64);
+		g.drawString("Reach the goal", canvas_width/2, canvas_height/2);
+		g.drawString("Press 'space' to start", canvas_width/2, canvas_height/2+64);
+	}
 
 
 		
 	public void paintComponent(Graphics g)
 	{	
-		// background
-		g.setColor(black);
-		g.fillRect(0, 0, canvas_width, canvas_height);
-		
-		// lines
-		g.setColor(white);
-
-		drawBgLines(g);
-		
-		
-		makePlayer(g, Player.getX(), getY());
-
-		//spawnOperators(g);
-		int[][] dividersList = Operators.getDividersList();
-		
-		for (int i=0; i<4; i++) 
-		{
-			if (dividersList[i][0] != 0) {
-				makeDivider(g, dividersList[i][0], dividersList[i][1], 
-					dividersList[i][2], dividersList[i][3], dividersList[i][4]);
-			}
-		}
-		
-		int[][] addersList = Operators.getAddersList();
-		
-		for (int i=0; i<4; i++) 
-		{
-			if (addersList[i][0] != 0) {
-				makeAdder(g, addersList[i][0], addersList[i][1], 
-						addersList[i][2], addersList[i][3], addersList[i][4], addersList[i][5]);
-				//System.out.println(addersList[i][0]+" "+ addersList[i][1]+" "+ 
-				//		addersList[i][2]+" "+  addersList[i][3]+" "+  addersList[i][4]+" "+  addersList[i][5]);
-			}
-		}
-
-		int[][] multipliersList = Operators.getMultipliersList();
-		
-		for (int i=0; i<4; i++) 
-		{
-			if (multipliersList[i][0] != 0) {
-				makeMultiplier(g, multipliersList[i][0], multipliersList[i][1], 
-						multipliersList[i][2], multipliersList[i][3], multipliersList[i][4], multipliersList[i][5]);
-			}
-		}
+		mainMenuScreen(g);
+		if (!menuScreen)
+			{
+			// background
+			g.setColor(black);
+			g.fillRect(0, 0, canvas_width, canvas_height);
 			
-		int[][] squaresList = Operators.getSquaresList();
+			// top boundary
+			g.setColor(new Color(127,127,127));
+			g.fillRect(0, 0, canvas_width, 64);
 		
-		for (int i=0; i<4; i++) 
-		{
-			if (squaresList[i][0] != 0) {
-				makeSquare(g, squaresList[i][0], squaresList[i][1], 
-						squaresList[i][2], squaresList[i][3], squaresList[i][4]);
-			}
-		}
+			// lines
+			g.setColor(white);
 
-		int[][] cubesList = Operators.getCubesList();
+			// this line is for testing purposes only
+			drawBgLines(g);
 		
-		for (int i=0; i<4; i++) 
-		{
-			if (cubesList[i][0] != 0) {
-				makeCube(g, cubesList[i][0], cubesList[i][1], 
-						cubesList[i][2], cubesList[i][3], cubesList[i][4]);
+		
+			makePlayer(g, Player.getX(), getY());
+
+			//spawnOperators(g);
+			int[][] dividersList = Operators.getDividersList();
+		
+			for (int i=0; i<4; i++) 
+			{
+				if (dividersList[i][0] != 0) {
+					makeDivider(g, dividersList[i][0], dividersList[i][1], 
+							dividersList[i][2], dividersList[i][3], dividersList[i][4]);
+				}
 			}
+		
+			int[][] addersList = Operators.getAddersList();
+		
+			for (int i=0; i<4; i++) 
+			{
+				if (addersList[i][0] != 0) {
+					makeAdder(g, addersList[i][0], addersList[i][1], 
+							addersList[i][2], addersList[i][3], addersList[i][4], addersList[i][5]);
+					//System.out.println(addersList[i][0]+" "+ addersList[i][1]+" "+ 
+					//		addersList[i][2]+" "+  addersList[i][3]+" "+  addersList[i][4]+" "+  addersList[i][5]);
+				}
+			}
+
+			int[][] multipliersList = Operators.getMultipliersList();
+		
+			for (int i=0; i<4; i++) 
+			{
+				if (multipliersList[i][0] != 0) {
+					makeMultiplier(g, multipliersList[i][0], multipliersList[i][1], 
+						multipliersList[i][2], multipliersList[i][3], multipliersList[i][4], multipliersList[i][5]);
+				}
+			}
+			
+			int[][] squaresList = Operators.getSquaresList();
+			
+			for (int i=0; i<4; i++) 
+			{
+				if (squaresList[i][0] != 0) {
+					makeSquare(g, squaresList[i][0], squaresList[i][1], 
+						squaresList[i][2], squaresList[i][3], squaresList[i][4]);
+				}
+			}
+
+			int[][] cubesList = Operators.getCubesList();
+		
+			for (int i=0; i<4; i++) 
+			{
+				if (cubesList[i][0] != 0) {
+					makeCube(g, cubesList[i][0], cubesList[i][1], 
+							cubesList[i][2], cubesList[i][3], cubesList[i][4]);
+				}
+			}
+		
+			if (gameOver)
+			{
+				String gameOverString = "Game Over";
+				g.setColor(new Color(255,0,0));
+				g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
+				g.drawString(gameOverString,(canvas_width-gameOverString.length())/2, canvas_height/2);
+			}
+			//score display
+		
+			g.setColor(white);
+			g.fillRect(0, canvas_height, canvas_width, canvas_height/4);
+		
+			g.setColor(new Color(0,0,0));
+			g.setFont(statsFont);
+			g.drawString("x="+Player.getScore(),canvas_width/2, canvas_height+64);
 		}
-		
-		if (!gameRunning)
-		{
-			g.setColor(new Color(255,0,0));
-			g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
-			g.drawString("Game Over",canvas_width/2, canvas_height/2);
-		}
-		//score display
-		
-		g.setColor(white);
-		g.fillRect(0, canvas_height, canvas_width, canvas_height/4);
-		
-		g.setColor(new Color(0,0,0));
-		g.setFont(statsFont);
-		g.drawString("x="+Player.getScore(),canvas_width/2, canvas_height+64);
-	
 	}
 	
 	public static void main(String[] args)
@@ -354,6 +381,13 @@ public class MainGame extends JPanel implements KeyListener {
 		//Indicate that closing the window will shut down the program
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//Set screen size
+		//Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		//canvas_width = screenSize.width;
+		//canvas_height = screenSize.height;
+
+		//canvas_width = 1024;
+		//canvas_height = 512;
+		
 		window.setSize(canvas_width, canvas_height*5/4);
 		//Indicate that the user can't make the window bigger or smaller
 		window.setResizable(true);
@@ -375,7 +409,7 @@ public class MainGame extends JPanel implements KeyListener {
 
 	public void keyPressed(KeyEvent e) {
 		if ((e.getKeyCode()==KeyEvent.VK_W || e.getKeyCode()==KeyEvent.VK_UP) &&
-				Player.getY() > 32)
+				Player.getY() > 32+64)
 		{
 			Player.raisePlayerY(-playerSpeed);
 			repaint();			
@@ -399,6 +433,11 @@ public class MainGame extends JPanel implements KeyListener {
 		{
 			Player.raisePlayerX(playerSpeed);
 			repaint();	
+		}
+		if (e.getKeyCode()==KeyEvent.VK_SPACE)
+		{
+			menuScreen = false;
+			//gameOver = false;
 		}
 	}
 	

@@ -1,4 +1,5 @@
 import java.util.Random;
+
 public class Operators {
 
 	public static int opX = 0;
@@ -238,10 +239,15 @@ public class Operators {
 		setCoords(64*opX-32, 0);
 	
 		// set color
-		int[] colorValues =  {31, 63, 95, 191, 223, 255};
+		int[] colorValues =  {0, 31, 63, 95, 159, 191, 223, 255};
 		int randomRedIndex = rand.nextInt(6);
 		int randomGreenIndex = rand.nextInt(6);
 		int randomBlueIndex = rand.nextInt(6);
+		while (randomRedIndex+randomGreenIndex+randomBlueIndex==0) {
+			randomRedIndex = rand.nextInt(6);
+			randomGreenIndex = rand.nextInt(6);
+			randomBlueIndex = rand.nextInt(6);
+		}
 		setColor(colorValues[randomRedIndex], colorValues[randomGreenIndex],
 				colorValues[randomBlueIndex]);
 	}
