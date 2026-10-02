@@ -18,14 +18,14 @@ public class MainGame extends JPanel implements KeyListener {
 	public static int canvas_height = 512;
 	public Timer timer;
 	public int mSeconds = 0;
-	public boolean gameOver = false;
+	public boolean gameRunning = true;
 	public int playerSpeed = 8;   
 	
 	ActionListener taskPerformer = new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					if (!gameOver)
+					if (gameRunning)
 					{
 						mSeconds +=64; // adds 16 milliseconds to the timer
 						//System.out.println(mSeconds);
@@ -195,14 +195,17 @@ public class MainGame extends JPanel implements KeyListener {
 	  	return ydistance < distance; // check if the difference is close enough
 	}
 	
-	public boolean collision(int[][] listName)
+	public void collision(int[][] listName)
 	{
-		boolean isCollision = false;
 		for (int i=0; i<4; i+=1)
 		{
 			if (xCollision(listName[i][0], Player.getX(), 64)
 					&& xCollision(listName[i][1], Player.getY(), 64))
 			{
+				if (listName == Operators.getDividersList())
+				{
+					gameRunning = false;
+					playerSpeed = 0;				}
 				if (listName == Operators.getAddersList())
 				{
 					Player.setScore(Player.getScore()+listName[i][2]);
@@ -213,10 +216,13 @@ public class MainGame extends JPanel implements KeyListener {
 				}
 				if (listName == Operators.getSquaresList())
 				{
+					System.out.println("Square hit: "+Player.getScore()*Player.getScore()+",");
 					Player.setScore(Player.getScore()*Player.getScore());
 				}
 				if (listName == Operators.getCubesList())
 				{
+					System.out.print("Cube hit: "+Player.getScore()*Player.getScore()+",");
+					System.out.println(Player.getScore()*Player.getScore()*Player.getScore());
 					Player.setScore(Player.getScore()*Player.getScore()*Player.getScore());
 				}
 				for (int j = 0; j < 4; j+=1) // if it is an adder or multiplier it does not matter if the blue value doe not get turned to 0
@@ -224,36 +230,19 @@ public class MainGame extends JPanel implements KeyListener {
 				}
 				
 
-				return isCollision = true;
 			}
 		}
-		return isCollision;
 	}
 	
 	public void checkHits()
 	{
 		// loops done through each operator list to check if the player's coordinates touch an operator's coordinates
-		if (collision(Operators.getDividersList()))
-		{
-			gameOver = true;
-			playerSpeed = 0;
-		}
-		if (collision(Operators.getAddersList()))
-		{
-			
-		}
-		if (collision(Operators.getMultipliersList()))
-		{
-			
-		}
-		if (collision(Operators.getSquaresList()))
-		{
-	
-		}
-		if (collision(Operators.getCubesList()))
-		{
-	
-		}
+		collision(Operators.getDividersList());
+		collision(Operators.getAddersList());
+		collision(Operators.getMultipliersList());
+		collision(Operators.getSquaresList());
+		collision(Operators.getCubesList());
+
 
 	}
 	
@@ -279,8 +268,8 @@ public class MainGame extends JPanel implements KeyListener {
 		g.setColor(black);
 		g.fillRect(0, 0, canvas_width, canvas_height);
 		
+		// lines
 		g.setColor(white);
-		g.fillRect(0, canvas_height, canvas_width, canvas_height/4);
 
 		drawBgLines(g);
 		
@@ -334,19 +323,23 @@ public class MainGame extends JPanel implements KeyListener {
 		
 		for (int i=0; i<4; i++) 
 		{
-			if (squaresList[i][0] != 0) {
+			if (cubesList[i][0] != 0) {
 				makeCube(g, cubesList[i][0], cubesList[i][1], 
 						cubesList[i][2], cubesList[i][3], cubesList[i][4]);
 			}
 		}
 		
-		if (gameOver)
+		if (!gameRunning)
 		{
 			g.setColor(new Color(255,0,0));
 			g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
 			g.drawString("Game Over",canvas_width/2, canvas_height/2);
 		}
 		//score display
+		
+		g.setColor(white);
+		g.fillRect(0, canvas_height, canvas_width, canvas_height/4);
+		
 		g.setColor(new Color(0,0,0));
 		g.setFont(statsFont);
 		g.drawString("x="+Player.getScore(),canvas_width/2, canvas_height+64);

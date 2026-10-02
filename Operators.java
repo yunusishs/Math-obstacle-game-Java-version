@@ -263,7 +263,7 @@ public class Operators {
 		// the multipliers
 		operatorConfigs(); // make random configurations
 		opY = -160; 
-		setTimesValue(rand.nextInt(10));
+		setTimesValue(rand.nextInt(12)-2);
 		editOperatorList(multipliersList);		
 
 		// The squares
