@@ -35,7 +35,7 @@ public class MainGame extends JPanel implements KeyListener {
 					{
 						mSeconds +=64; // adds 16 milliseconds to the timer
 						//System.out.println(mSeconds);
-						if (mSeconds%6144==0) //when all the operators get made
+						if (mSeconds%4096==0) //when all the operators get made
 						{
 							Operators.makeOperators();
 						}
@@ -52,11 +52,10 @@ public class MainGame extends JPanel implements KeyListener {
 	// fonts and colors
 	Color black = new Color(0,0,0);
 	Color white = new Color(255,255,255);
-	Font opFont = new Font("Cambria Math", Font.ITALIC, 40);
-	Font playerFont = new Font("Cambria Math", Font.ITALIC, 40);
+	Font opFont = new Font("Cambria Math", Font.ITALIC, 32);
+	Font playerFont = new Font("Cambria Math", Font.ITALIC, 32);
 	Font statsFont = new Font("Cambria Math", Font.ITALIC, 32);
 
-	private Player player1;
 
 	
 	public static int getCanvasWidth()
@@ -71,7 +70,6 @@ public class MainGame extends JPanel implements KeyListener {
 		
 	public void init()
 	{
-		player1 = new Player(MainGame.getCanvasWidth()/2, MainGame.getCanvasHeight()/2);
 		timer = new Timer(64,taskPerformer);
 		timer.start();
 	}
@@ -208,6 +206,7 @@ public class MainGame extends JPanel implements KeyListener {
 			if (xCollision(listName[i][0], Player.getX(), 64)
 					&& xCollision(listName[i][1], Player.getY(), 64))
 			{
+				//check for the large number issue
 				if (listName == Operators.getDividersList())
 				{
 					gameOver = true;
@@ -231,7 +230,7 @@ public class MainGame extends JPanel implements KeyListener {
 				for (int j = 0; j < 2; j+=1) // if it is an adder or multiplier it does not matter only the coordinates matter
 					{	listName[i][j] = 0;
 				}
-				
+
 
 			}
 		}
@@ -437,7 +436,13 @@ public class MainGame extends JPanel implements KeyListener {
 		if (e.getKeyCode()==KeyEvent.VK_SPACE)
 		{
 			menuScreen = false;
-			//gameOver = false;
+			if (gameOver)
+			{
+				System.out.println("g");
+				Player.setScore(0);
+				repaint();  
+
+			}
 		}
 	}
 	

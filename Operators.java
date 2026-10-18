@@ -13,48 +13,49 @@ public class Operators {
 	public static int[][] dividersList = {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
+			{416, -160, 31, 31, 31},
+			{608, -160, 31, 31, 31},
+			{416, -160, 31, 31, 31},
+			{608, -160, 31, 31, 31},
 	};
+
 	
 	public static int[][] addersList = {
 			//{0=x, 1=y, 2=addvalue, 3=red, 4=green, 5=blue}
 			
-			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0},
+			{288, -32, 0, 255, 0, 0},
+			{288, -32, 0, 255, 0, 0},
+			{288, -32, 0, 255, 0, 0},
+			{288, -32, 0, 255, 0, 0},
 	};
 
 	public static int[][] multipliersList = {
 			//{0=x, 1=y, 2=multiplyValue, 3=red, 4=green, 5=blue}
 			
-			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0},
+			{416, -32, 1, 255, 255, 0},
+			{416, -32, 1, 255, 255, 0},
+			{416, -32, 1, 255, 255, 0},
+			{416, -32, 1, 255, 255, 0},
 	};
 
 	public static int[][] squaresList = {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
+			{608, -32, 0, 255, 0},
+			{608, -32, 0, 255, 0},
+			{608, -32, 0, 255, 0},
+			{608, -32, 0, 255, 0},
 	};
 
 	public static int[][] cubesList = {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0},
+			{736, -32, 0, 0, 255},
+			{736, -32, 0, 0, 255},
+			{736, -32, 0, 0, 255},
+			{736, -32, 0, 0, 255},
 	};
-	
+
 	public static int[][] getDividersList()
 	{
 		return dividersList;
@@ -176,6 +177,9 @@ public class Operators {
 	
 	public static void editOperatorList(int[][] listName) 
 	{
+		// each item is its array
+		// 0th item in each 2D array is the newest item
+		// each item moves one up the index number
 		for (int i=3; i>0; i--) // this makes space for the new item
 		{
 			if (listName == addersList || listName == multipliersList)
@@ -273,14 +277,23 @@ public class Operators {
 		editOperatorList(multipliersList);		
 
 		// The squares
-		operatorConfigs(); // make random configurations
-		opY = -224;
-		editOperatorList(squaresList);		
+		int squareOrCube = rand.nextInt(8);
+		//if that is 0, spawn a square, if it is 2, spawn a cube, else spawn nothing
+		if (squareOrCube ==0)
+		{
+			operatorConfigs(); // make random configurations
+			opY = -224;
+			editOperatorList(squaresList);
+		}		
 
-		// The cubes
-		operatorConfigs(); // make random configurations
-		opY = -288;
-		editOperatorList(cubesList);		
+		else if (squareOrCube ==1)
+		{
+			// The cubes
+			operatorConfigs(); // make random configurations
+			opY = -224;
+			editOperatorList(cubesList);	
+		}
+	
 	}
 	
 	public static void moveOperators()
