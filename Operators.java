@@ -10,7 +10,7 @@ public class Operators {
 	public static int green = 0;
 	public static int blue = 0;
 	
-	public static int[][] dividersList = {
+	public static int[][] initialDividersList = {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
 			{416, -160, 31, 31, 31},
@@ -18,9 +18,8 @@ public class Operators {
 			{416, -160, 31, 31, 31},
 			{608, -160, 31, 31, 31},
 	};
-
 	
-	public static int[][] addersList = {
+	public static int[][] initialAddersList = {
 			//{0=x, 1=y, 2=addvalue, 3=red, 4=green, 5=blue}
 			
 			{288, -32, 0, 255, 0, 0},
@@ -29,7 +28,8 @@ public class Operators {
 			{288, -32, 0, 255, 0, 0},
 	};
 
-	public static int[][] multipliersList = {
+
+	public static int[][] initialMultipliersList = {
 			//{0=x, 1=y, 2=multiplyValue, 3=red, 4=green, 5=blue}
 			
 			{416, -32, 1, 255, 255, 0},
@@ -37,8 +37,9 @@ public class Operators {
 			{416, -32, 1, 255, 255, 0},
 			{416, -32, 1, 255, 255, 0},
 	};
+	
 
-	public static int[][] squaresList = {
+	public static int[][] initialSquaresList = {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
 			{608, -32, 0, 255, 0},
@@ -47,7 +48,7 @@ public class Operators {
 			{608, -32, 0, 255, 0},
 	};
 
-	public static int[][] cubesList = {
+	public static int[][] initialCubesList = {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
 			{736, -32, 0, 0, 255},
@@ -55,6 +56,12 @@ public class Operators {
 			{736, -32, 0, 0, 255},
 			{736, -32, 0, 0, 255},
 	};
+	
+	public static int[][] dividersList = initialDividersList;
+	public static int[][] addersList = initialAddersList;
+	public static int[][] multipliersList = initialMultipliersList;
+	public static int[][] squaresList = initialSquaresList;
+	public static int[][] cubesList = initialCubesList;
 
 	public static int[][] getDividersList()
 	{
@@ -306,5 +313,15 @@ public class Operators {
 			squaresList[i][1] += 4;
 			cubesList[i][1] += 4;
 		}	
+	}
+	
+	public static void resetOperators()
+	{
+		dividersList = initialDividersList;
+		addersList = initialAddersList;
+		multipliersList = initialMultipliersList;
+		squaresList = initialSquaresList;
+		cubesList = initialCubesList;
+		System.out.println("aaa");
 	}
 }

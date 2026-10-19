@@ -23,7 +23,10 @@ public class MainGame extends JPanel implements KeyListener {
 	public Timer timer;
 	public int mSeconds = 0;
 	public boolean menuScreen = true;
+	public boolean gameScreen = false;
+	public boolean pauseScreen = false;
 	public boolean gameOver = false;
+	
 	public int playerSpeed = 8;   
 	public int goal = 0;
 	
@@ -31,7 +34,7 @@ public class MainGame extends JPanel implements KeyListener {
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					if (!menuScreen && !gameOver)
+					if (!menuScreen && gameScreen && !pauseScreen && !gameOver)
 					{
 						mSeconds +=64; // adds 16 milliseconds to the timer
 						//System.out.println(mSeconds);
@@ -276,8 +279,6 @@ public class MainGame extends JPanel implements KeyListener {
 		g.drawString("Reach the goal", canvas_width/2, canvas_height/2);
 		g.drawString("Press 'space' to start", canvas_width/2, canvas_height/2+64);
 	}
-
-
 		
 	public void paintComponent(Graphics g)
 	{	
@@ -436,14 +437,18 @@ public class MainGame extends JPanel implements KeyListener {
 		if (e.getKeyCode()==KeyEvent.VK_SPACE)
 		{
 			menuScreen = false;
-			if (gameOver)
-			{
-				System.out.println("g");
-				Player.setScore(0);
-				repaint();  
-
-			}
+			gameScreen = true;
 		}
+		
+		if (e.getKeyCode()==KeyEvent.VK_R)
+		{
+			menuScreen = true;
+			gameOver = false;
+			Player.setScore(0);
+			Operators.resetOperators();
+			repaint();  
+		}
+
 	}
 	
 	public void keyReleased(KeyEvent e) {}
