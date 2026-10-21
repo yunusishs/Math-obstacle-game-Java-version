@@ -322,6 +322,6 @@ public class Operators {
 		multipliersList = initialMultipliersList;
 		squaresList = initialSquaresList;
 		cubesList = initialCubesList;
-		System.out.println("aaa");
+		System.out.println(dividersList[0][1]);
 	}
 }

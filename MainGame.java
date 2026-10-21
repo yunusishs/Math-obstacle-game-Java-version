@@ -10,31 +10,24 @@ import java.awt.event.*;
  */
 
 public class MainGame extends JPanel implements KeyListener {
-	
-	//public Operators operator;
-	//canvas configurations
-	
+		
 	public static int canvas_width = 1024;
 	public static int canvas_height = 512;
-	
-	//public static int canvas_width;
-	//public static int canvas_height;
-	
-	public Timer timer;
+		
+	public Timer timer; 
 	public int mSeconds = 0;
-	public boolean menuScreen = true;
-	public boolean gameScreen = false;
-	public boolean pauseScreen = false;
-	public boolean gameOver = false;
+	public boolean isInGame = false; // if the player is in the game
+	public boolean isPaused = false; // if the player paused the game
+	public boolean gameOver = false; // if the game is working enough
 	
-	public int playerSpeed = 8;   
-	public int goal = 0;
+	public int playerSpeed = 8;  // how many pixels the player moves
+	public int goal = 0; // the target number
 	
 	ActionListener taskPerformer = new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					if (!menuScreen && gameScreen && !pauseScreen && !gameOver)
+					if (isInGame && !isPaused && !gameOver) // all of the things that get looped will be run if those conditions are met
 					{
 						mSeconds +=64; // adds 16 milliseconds to the timer
 						//System.out.println(mSeconds);
@@ -46,16 +39,16 @@ public class MainGame extends JPanel implements KeyListener {
 						{
 							Operators.moveOperators();
 						}
-					checkHits();
+					checkHits(); // game needs to constantly check if the player is getting hit
 					repaint();
 					}
 				}
 			};
 	
 	// fonts and colors
-	Color black = new Color(0,0,0);
-	Color white = new Color(255,255,255);
-	Font opFont = new Font("Cambria Math", Font.ITALIC, 32);
+	Color black = new Color(0,0,0); // set what black equals
+	Color white = new Color(255,255,255); // set what white equals
+	Font opFont = new Font("Cambria Math", Font.ITALIC, 32); // set all the fonts
 	Font playerFont = new Font("Cambria Math", Font.ITALIC, 32);
 	Font statsFont = new Font("Cambria Math", Font.ITALIC, 32);
 
@@ -86,30 +79,27 @@ public class MainGame extends JPanel implements KeyListener {
 	
 	public void makePlayer(Graphics g, int xCoord, int yCoord)
 	{
-		// player box
-		g.setColor(new Color(0,0,255));
-		g.fillRect(Player.getX()-32, Player.getY()-32, 64, 64);
-
-		//player symbol
-		g.setColor(white);
-		g.setFont(playerFont);
-		g.drawString("x",Player.getX()-10,Player.getY()+10);
+		g.setColor(new Color(0,0,255)); // set to blue
+		g.fillRect(Player.getX()-32, Player.getY()-32, 64, 64); // the player's hitbox
+		
+		g.setColor(white); // set to white
+		g.setFont(playerFont); // the font for the player's face
+		g.drawString("x",Player.getX()-10,Player.getY()+10); // the text for the player's face
 	}
+	
 	// method to make dividers
 	
 	public void makeDivider(Graphics g, int xCoord, int yCoord, 
 			int red, int green, int blue)
 	{
-		//division box
-		g.setColor(new Color(red, green, blue));
-		g.fillRect(xCoord-32, yCoord-32, 64, 64);
+		g.setColor(new Color(red, green, blue)); // the color for the divider's hitbox
+		g.fillRect(xCoord-32, yCoord-32, 64, 64); // the shape for the divider's hitbox
 		
-		//division text
-		char divisionChar = (char) 247;
-		String divisionString = String.valueOf(divisionChar);
-		g.setColor(new Color(255-red, 255-green, 255-blue));
-		g.setFont(opFont);
-		g.drawString(divisionString+"0",xCoord-24, yCoord+12);
+		char divisionChar = (char) 247; // get the char for the divide symbol
+		String divisionString = String.valueOf(divisionChar); // turn the char into a string
+		g.setColor(new Color(255-red, 255-green, 255-blue)); // the color for the divider's face
+		g.setFont(opFont); // the font for the divider's face
+		g.drawString(divisionString+"0",xCoord-24, yCoord+12); // draw the divider's face
 	}
 	
 	// method to make adders
@@ -118,20 +108,20 @@ public class MainGame extends JPanel implements KeyListener {
 			int red, int green, int blue)
 	{
 		//adder box
-		g.setColor(new Color(red, green, blue));
-		g.fillRect(xCoord-32, yCoord-32, 64, 64);
+		g.setColor(new Color(red, green, blue)); // the color for the adder's hitbox
+		g.fillRect(xCoord-32, yCoord-32, 64, 64); // the shape for the divider's hitbox
 		
 		//adder text
-		Operators.setAddValue(addValue);
-		g.setColor(new Color(255-red, 255-green, 255-blue));
-		g.setFont(opFont);
+		Operators.setAddValue(addValue); // the addValue for the adder's face
+		g.setColor(new Color(255-red, 255-green, 255-blue)); // the color for the adder's face
+		g.setFont(opFont); // the font for the adder's face
 		if (addValue < 0)
 		{
-			g.drawString(""+addValue,xCoord-32, yCoord+12);
+			g.drawString(""+addValue,xCoord-32, yCoord+12); // if number is negative
 		}
 		else
 		{
-			g.drawString("+"+addValue,xCoord-32, yCoord+12);
+			g.drawString("+"+addValue,xCoord-32, yCoord+12); // if number is positive
 		}
 	}
 	
@@ -140,17 +130,16 @@ public class MainGame extends JPanel implements KeyListener {
 	public void makeMultiplier(Graphics g, int xCoord, int yCoord, int timesValue,
 			int red, int green, int blue)
 	{
-		//multiplier box
-		g.setColor(new Color(red, green, blue));
-		g.fillRect(xCoord-32, yCoord-32, 64, 64);
+		g.setColor(new Color(red, green, blue)); // the color for the multiplier's hitbox
+		g.fillRect(xCoord-32, yCoord-32, 64, 64); // the shape for the multiplier's hitbox
 	
 		//multiplier text
-		Operators.setTimesValue(timesValue);
-		char timesChar = (char) 215;
-		String timesString = String.valueOf(timesChar);
-		g.setColor(new Color(255-red, 255-green, 255-blue));
-		g.setFont(opFont);
-		g.drawString(timesString+timesValue,xCoord-32, yCoord+12);
+		Operators.setTimesValue(timesValue); // the timesValue for the multiplier's face
+		char timesChar = (char) 215; // get the char for the multiply symbol
+		String timesString = String.valueOf(timesChar); // turn it into a string
+		g.setColor(new Color(255-red, 255-green, 255-blue)); // the color for the 
+		g.setFont(opFont); // the font for the multiplier
+		g.drawString(timesString+timesValue,xCoord-32, yCoord+12); // draw the multiplier's face
 	}
 	
 	//method to make squares
@@ -160,7 +149,7 @@ public class MainGame extends JPanel implements KeyListener {
 	{	
 		
 		//square box
-		g.setColor(new Color(red, green, blue));
+		g.setColor(new Color(red, green, blue)); // the 
 		g.fillRect(xCoord-32, yCoord-32, 64, 64);
 		
 		//square text
@@ -233,8 +222,6 @@ public class MainGame extends JPanel implements KeyListener {
 				for (int j = 0; j < 2; j+=1) // if it is an adder or multiplier it does not matter only the coordinates matter
 					{	listName[i][j] = 0;
 				}
-
-
 			}
 		}
 	}
@@ -283,7 +270,7 @@ public class MainGame extends JPanel implements KeyListener {
 	public void paintComponent(Graphics g)
 	{	
 		mainMenuScreen(g);
-		if (!menuScreen)
+		if (isInGame)
 			{
 			// background
 			g.setColor(black);
@@ -436,14 +423,13 @@ public class MainGame extends JPanel implements KeyListener {
 		}
 		if (e.getKeyCode()==KeyEvent.VK_SPACE)
 		{
-			menuScreen = false;
-			gameScreen = true;
+			isInGame = true;
 		}
 		
 		if (e.getKeyCode()==KeyEvent.VK_R)
 		{
-			menuScreen = true;
-			gameOver = false;
+	
+			isInGame = false;
 			Player.setScore(0);
 			Operators.resetOperators();
 			repaint();  
