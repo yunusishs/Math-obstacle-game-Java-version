@@ -1,8 +1,8 @@
 public class Player {
 	
 	//String PLAYER_NAME = "";
-	static int playerX = MainGame.getCanvasWidth()/2;
-	static int playerY = MainGame.getCanvasHeight()/2;
+	static int playerX;
+	static int playerY;
 	
 	public static int score = 0;
 	

@@ -10,59 +10,62 @@ public class Operators {
 	public static int green = 0;
 	public static int blue = 0;
 	
-	public static int[][] initialDividersList = {
+	public static int[][] dividersList;
+	public static int[][] addersList;
+	public static int[][] multipliersList;
+	public static int[][] squaresList;
+	public static int[][] cubesList;	
+	
+	public static void resetOperators()
+	{
+		dividersList = new int[][] {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
 			{416, -160, 31, 31, 31},
 			{608, -160, 31, 31, 31},
 			{416, -160, 31, 31, 31},
 			{608, -160, 31, 31, 31},
-	};
+		};
 	
-	public static int[][] initialAddersList = {
+		addersList = new int[][] {
 			//{0=x, 1=y, 2=addvalue, 3=red, 4=green, 5=blue}
 			
 			{288, -32, 0, 255, 0, 0},
 			{288, -32, 0, 255, 0, 0},
 			{288, -32, 0, 255, 0, 0},
 			{288, -32, 0, 255, 0, 0},
-	};
+		};
 
 
-	public static int[][] initialMultipliersList = {
+		multipliersList = new int[][] {
 			//{0=x, 1=y, 2=multiplyValue, 3=red, 4=green, 5=blue}
 			
 			{416, -32, 1, 255, 255, 0},
 			{416, -32, 1, 255, 255, 0},
 			{416, -32, 1, 255, 255, 0},
 			{416, -32, 1, 255, 255, 0},
-	};
+		};
 	
 
-	public static int[][] initialSquaresList = {
+		squaresList = new int[][] {
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
 			{608, -32, 0, 255, 0},
 			{608, -32, 0, 255, 0},
 			{608, -32, 0, 255, 0},
 			{608, -32, 0, 255, 0},
-	};
+		};
 
-	public static int[][] initialCubesList = {
+		cubesList = new int [][]{
 			//{0=x, 1=y, 2=red, 3=green, 4=blue}
 			
 			{736, -32, 0, 0, 255},
 			{736, -32, 0, 0, 255},
 			{736, -32, 0, 0, 255},
 			{736, -32, 0, 0, 255},
-	};
-	
-	public static int[][] dividersList = initialDividersList;
-	public static int[][] addersList = initialAddersList;
-	public static int[][] multipliersList = initialMultipliersList;
-	public static int[][] squaresList = initialSquaresList;
-	public static int[][] cubesList = initialCubesList;
-
+		};
+	} 
+		
 	public static int[][] getDividersList()
 	{
 		return dividersList;
@@ -303,25 +306,16 @@ public class Operators {
 	
 	}
 	
-	public static void moveOperators()
+	public static void moveOperators(int speed)
 	{
 		for (int i = 0; i < 4; i+=1)
 		{
-			dividersList[i][1] += 4;
-			addersList[i][1] += 4;
-			multipliersList[i][1] += 4;
-			squaresList[i][1] += 4;
-			cubesList[i][1] += 4;
+			dividersList[i][1] += speed;
+			addersList[i][1] += speed;
+			multipliersList[i][1] += speed;
+			squaresList[i][1] += speed;
+			cubesList[i][1] += speed;
 		}	
 	}
 	
-	public static void resetOperators()
-	{
-		dividersList = initialDividersList;
-		addersList = initialAddersList;
-		multipliersList = initialMultipliersList;
-		squaresList = initialSquaresList;
-		cubesList = initialCubesList;
-		System.out.println(dividersList[0][1]);
-	}
 }

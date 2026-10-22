@@ -16,12 +16,16 @@ public class MainGame extends JPanel implements KeyListener {
 		
 	public Timer timer; 
 	public int mSeconds = 0;
+	
 	public boolean isInGame = false; // if the player is in the game
 	public boolean isPaused = false; // if the player paused the game
 	public boolean gameOver = false; // if the game is working enough
 	
 	public int playerSpeed = 8;  // how many pixels the player moves
-	public int goal = 0; // the target number
+	public int opSpeed = 4; // how many pixels the operators move
+	
+	
+	public int goal; // the target number      
 	
 	ActionListener taskPerformer = new ActionListener()
 			{
@@ -37,7 +41,7 @@ public class MainGame extends JPanel implements KeyListener {
 						}
 						if (mSeconds%64==0) //when all the operators are moving
 						{
-							Operators.moveOperators();
+							Operators.moveOperators(opSpeed);
 						}
 					checkHits(); // game needs to constantly check if the player is getting hit
 					repaint();
@@ -341,13 +345,18 @@ public class MainGame extends JPanel implements KeyListener {
 							cubesList[i][2], cubesList[i][3], cubesList[i][4]);
 				}
 			}
-		
-			if (gameOver)
+			
+			if (isPaused && !gameOver) // check if game is paused
 			{
-				String gameOverString = "Game Over";
+				g.setColor(new Color(255,127,0));
+				g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
+				g.drawString("Game Paused",canvas_width/2, canvas_height/2);
+			}
+			if (gameOver) // check if game is over
+			{
 				g.setColor(new Color(255,0,0));
 				g.setFont(new Font("Cambria Math", Font.ITALIC, 40));
-				g.drawString(gameOverString,(canvas_width-gameOverString.length())/2, canvas_height/2);
+				g.drawString("Game Over", canvas_width/2, canvas_height/2);
 			}
 			//score display
 		
@@ -421,15 +430,42 @@ public class MainGame extends JPanel implements KeyListener {
 			Player.raisePlayerX(playerSpeed);
 			repaint();	
 		}
-		if (e.getKeyCode()==KeyEvent.VK_SPACE)
+		if (e.getKeyCode()==KeyEvent.VK_SPACE) // start the game
 		{
 			isInGame = true;
+			Operators.resetOperators();
+			Player.setCoords(canvas_width/2, canvas_height/2);
 		}
 		
-		if (e.getKeyCode()==KeyEvent.VK_R)
+		if (e.getKeyCode()==KeyEvent.VK_P) // pause the game
 		{
-	
-			isInGame = false;
+			if (!isPaused)
+			{
+				isPaused = true;
+				playerSpeed = 0;
+				opSpeed = 0;
+			}
+			
+			else if (isPaused)
+			{
+				isPaused = false;
+				playerSpeed = 8;
+				opSpeed = 4;
+			}
+			repaint();
+		}
+		
+		if (e.getKeyCode()==KeyEvent.VK_R) // restart the game
+		{
+			mSeconds = 0;
+
+			isInGame = false; // if the player is in the game
+			isPaused = false; // if the player paused the game
+			gameOver = false; // if the game is working enough
+			
+			playerSpeed = 8;  // how many pixels the player moves
+			opSpeed = 4; // how many pixels the operators move
+			
 			Player.setScore(0);
 			Operators.resetOperators();
 			repaint();  
